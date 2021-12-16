@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
-  before_action :load_question, only: [:index, :new, :edit, :create]
-  before_action :load_answer, only: [:show]
+  before_action :load_question, only: [:index, :new, :edit, :create, :update]
+  before_action :load_answer, only: [:show, :update]
 
   def index
     @answers = @question.answers
@@ -19,13 +19,20 @@ class AnswersController < ApplicationController
   end
 
   def create
-
     @answer = @question.answers.create(answer_params)
 
     if @answer.save
       redirect_to question_answer_path(@question, @answer)
     else
       render :new
+    end
+  end
+
+  def update
+    if @answer.update(answer_params)
+      redirect_to question_answer_path(@question, @answer)
+    else
+      render :edit
     end
   end
 
