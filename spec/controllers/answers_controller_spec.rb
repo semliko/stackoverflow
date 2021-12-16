@@ -9,12 +9,12 @@ RSpec.describe AnswersController, type: :controller do
     let(:answers) { create_list(:answer, 3, question: question) }
 
     it 'populates an array of all answers' do
-      get question_answers_path(question)
-      expect(assigns(:answer)).to match_array(answers)
+      get :index, params: { question_id: question }
+      expect(assigns(:answers)).to match_array(answers)
     end
 
     it 'renders index view' do
-      get :index
+      get :index, params: { question_id: question }
       expect(response).to render_template :index
     end
   end
