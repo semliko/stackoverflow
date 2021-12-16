@@ -20,10 +20,26 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #show' do
-    before { get :show, params: { question_id: question.id, id: answer.id } }
+    before { get :show, params: { question_id: question, id: answer } }
 
     it 'renders show view' do
       expect(response).to render_template :show
+    end
+  end
+
+  describe 'GET #new' do
+    before { get :new, params: { question_id: question } }
+
+    it 'renders new view' do
+      expect(response).to render_template :new
+    end
+  end
+
+  describe 'GET #edit' do
+    before { get :edit, params: { id: answer, question_id: question } }
+
+    it 'renders edit view' do
+      expect(response).to render_template :edit
     end
   end
 end

@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :load_question, only: [:index]
+  before_action :load_question, only: [:index, :new, :edit]
   before_action :load_answer, only: [:show]
 
   def index
@@ -7,6 +7,14 @@ class AnswersController < ApplicationController
   end
 
   def show
+
+  end
+
+  def new
+    @question.answers.build
+  end
+
+  def edit
 
   end
 
