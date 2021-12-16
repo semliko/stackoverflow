@@ -11,7 +11,7 @@ class AnswersController < ApplicationController
   end
 
   def new
-    @question.answers.build
+    @answer = @question.answers.build
   end
 
   def edit
