@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
-  before_action :load_question, only: [:index, :new, :edit, :create, :update]
-  before_action :load_answer, only: [:show, :update]
+  before_action :load_question, only: [:index, :new, :edit, :create, :update, :destroy]
+  before_action :load_answer, only: [:show, :update, :destroy, :edit]
 
   def index
     @answers = @question.answers
@@ -34,6 +34,11 @@ class AnswersController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def destroy
+    @answer.destroy
+    redirect_to question_answers_path(@question)
   end
 
   private
