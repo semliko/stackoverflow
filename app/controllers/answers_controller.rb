@@ -1,4 +1,5 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!, only: [:create, :update]
   before_action :load_question, only: [:index, :new, :edit, :create, :update, :destroy]
   before_action :load_answer, only: [:show, :update, :destroy, :edit]
 
@@ -22,15 +23,15 @@ class AnswersController < ApplicationController
     @answer = @question.answers.create(answer_params)
 
     if @answer.save
-      redirect_to question_answer_path(@question, @answer)
+      redirect_to question_path(@question)
     else
-      render :new
+      redirect_to question_path(@question)
     end
   end
 
   def update
     if @answer.update(answer_params)
-      redirect_to question_answer_path(@question, @answer)
+      redirect_to question_path(@question)
     else
       render :edit
     end
@@ -38,7 +39,7 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.destroy
-    redirect_to question_answers_path(@question)
+    redirect_to question_path(@question)
   end
 
   private
