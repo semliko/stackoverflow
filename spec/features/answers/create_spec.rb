@@ -17,7 +17,6 @@ I'd like to be able to add an answer
       sign_in(user_1)
 
       visit question_path(question)
-      click_on 'Add Answer'
     end
 
     scenario 'ask a question' do

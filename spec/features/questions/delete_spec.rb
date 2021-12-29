@@ -35,7 +35,7 @@ Only me can delete my questions
       sign_in(user_2)
     end
 
-    scenario 'cannot delete other users questions' do
+    scenario 'cannot delete user_1 questions' do
       visit questions_path
       click_on 'Ask question'
 

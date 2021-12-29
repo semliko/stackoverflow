@@ -18,4 +18,10 @@ module FeatureHelpers
     click_on 'Ask'
   end
 
+  def answer(question)
+    visit question_path(question)
+    fill_in 'answer_body', with: 'Test answer'
+    click_on 'Add Answer'
+  end
+
 end
