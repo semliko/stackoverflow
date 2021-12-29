@@ -2,12 +2,13 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
 
-  let(:question) { create(:question) }
-  let(:answer) { create(:answer, question: question) }
-  let(:user) { create(:user) }
+  let(:user_1) { create(:user) }
+  let(:user_2) { create(:user) }
+  let(:question) { create(:question, user: user_1) }
+  let(:answer) { create(:answer, question: question, user: user_1) }
 
   describe 'GET #index' do
-    let(:answers) { create_list(:answer, 3, question: question) }
+    let(:answers) { create_list(:answer, 3, question: question, user: user_1) }
 
     it 'populates an array of all answers' do
       get :index, params: { question_id: question }
@@ -37,7 +38,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #edit' do
-    before { login(user) }
+    before { login(user_1) }
     before { get :edit, params: { id: answer, question_id: question } }
 
     it 'renders edit view' do
@@ -48,9 +49,10 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
 
     context 'with valid attributes' do
-      before { login(user) }
+      before { login(user_1) }
       it 'saves a new answer in the database' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:answer) } }.to change(question.answers, :count).by(1)
+        expect { post :create, params: { question_id: question, user_id: user_1, answer: attributes_for(:answer) } }.to change(question.answers, :count).by(1)
+        expect { post :create, params: { question_id: question, user_id: user_1, answer: attributes_for(:answer) } }.to change(user_1.answers, :count).by(1)
       end
 
       it 'redirects to question show view' do
@@ -60,7 +62,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'with invalid attributes' do
-      before { login(user) }
+      before { login(user_1) }
       it 'does not save the answer' do
         expect { post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) } }.to_not change(question.answers, :count)
       end
@@ -73,7 +75,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #update' do
-    before { login(user) }
+    before { login(user_1) }
 
     context 'with valid attributes' do
       it 'assigns the requested answer to @answer' do
@@ -110,9 +112,9 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before { login(user) }
+    before { login(user_1) }
 
-    let!(:answer) { create(:answer, question: question) }
+    let!(:answer) { create(:answer, question: question, user: user_1) }
     it 'deletes the answer' do
       expect { delete :destroy, params: { question_id: question, id: answer } }.to change(question.answers, :count).by(-1)
     end

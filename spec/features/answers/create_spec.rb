@@ -7,13 +7,14 @@ As an anauthenticated user
 I'd like to be able to add an answer
 ) do
 
-  given(:user) { create(:user) }
-  given(:question) { create(:question) }
+  given(:user_1) { create(:user) }
+  given(:user_2) { create(:user) }
+  given(:question) { create(:question, user: user_1) }
 
   describe 'Authenticated user' do
 
     background do
-      sign_in(user)
+      sign_in(user_1)
 
       visit question_path(question)
       click_on 'Add Answer'
