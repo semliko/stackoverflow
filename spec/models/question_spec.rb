@@ -4,6 +4,7 @@ RSpec.describe Question, type: :model do
 
   describe 'associations' do
     it { should have_many :answers }
+    it { should belong_to(:user).class_name('User') }
   end
 
   describe 'validations' do
