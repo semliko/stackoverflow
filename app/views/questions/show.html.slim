@@ -10,7 +10,7 @@ table
     - @question.answers.each do |answer|
       tr
         td = answer.body
-        -if answer.user_id == current_user.id
+        -if current_user.author_of?(answer.id)
           td = link_to 'Edit', edit_question_answer_path(question_id: @question, id: answer)
           td = link_to 'Destroy',  question_answer_path(@question, answer), method: :delete, data: { confirm: 'Are you sure?' }
         -else

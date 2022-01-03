@@ -6,7 +6,7 @@ class User < ApplicationRecord
   has_many :questions
   has_many :answers
 
-  def belongs_to_user(obj_id)
+  def author_of?(obj_id)
     obj_id == id
   end
 end

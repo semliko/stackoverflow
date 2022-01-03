@@ -25,7 +25,6 @@ I'd like to be able to add an answer
 
       expect(page).to have_content 'Test answer'
     end
-
   end
 
   scenario 'Unauthenticated user create answer  with errors' do
@@ -34,6 +33,6 @@ I'd like to be able to add an answer
     fill_in 'answer_body', with: 'Test answer'
     click_on 'Add Answer'
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to_not have_content 'Test answer'
   end
 end

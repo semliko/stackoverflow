@@ -27,15 +27,14 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if current_user.belongs_to_user(@answer.id) && @answer.update(answer_params)
-      redirect_to question_path(@question)
-    else
-      render :edit
+    if current_user.author_of?(@answer.id)
+      @answer.update(answer_params)
     end
+    redirect_to question_path(@question)
   end
 
   def destroy
-    if current_user.belongs_to_user(@answer.id)
+    if current_user.author_of?(@answer.id)
       @answer.destroy
     end
     redirect_to question_path(@question)
