@@ -27,7 +27,7 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if answer_belongs_to_user && @answer.update(answer_params)
+    if current_user.belongs_to_user(@answer.id) && @answer.update(answer_params)
       redirect_to question_path(@question)
     else
       render :edit
@@ -35,17 +35,13 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    if answer_belongs_to_user
+    if current_user.belongs_to_user(@answer.id)
       @answer.destroy
     end
     redirect_to question_path(@question)
   end
 
   private
-
-  def answer_belongs_to_user
-    @answer.user == current_user
-  end
 
   def answer_params
     params.require(:answer).permit(:question_id, :body, :user_id)

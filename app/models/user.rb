@@ -5,4 +5,8 @@ class User < ApplicationRecord
     :recoverable, :rememberable, :validatable
   has_many :questions
   has_many :answers
+
+  def belongs_to_user(obj_id)
+    obj_id == id
+  end
 end
