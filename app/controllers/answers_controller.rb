@@ -20,17 +20,16 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.create(answer_params)
+    @answer = @question.answers.new(answer_params)
     @answer.user_id = current_user.id
-    @answer.save
-    redirect_to question_path(@question)
+    redirect_to @question if @answer.save
   end
 
   def update
     if current_user.author_of?(@answer.id)
       @answer.update(answer_params)
     end
-    redirect_to question_path(@question)
+    redirect_to @question
   end
 
   def destroy
