@@ -4,49 +4,11 @@ RSpec.describe AnswersController, type: :controller do
 
   let(:user_1) { create(:user) }
   let(:user_2) { create(:user) }
+  let(:user_3) { create(:user) }
   let(:question) { create(:question, user: user_1) }
   let(:answer) { create(:answer, question: question, user: user_1) }
-
-  describe 'GET #index' do
-    let(:answers) { create_list(:answer, 3, question: question, user: user_1) }
-
-    it 'populates an array of all answers' do
-      get :index, params: { question_id: question }
-      expect(assigns(:answers)).to match_array(answers)
-    end
-
-    it 'renders index view' do
-      get :index, params: { question_id: question }
-      expect(response).to render_template :index
-    end
-  end
-
-  describe 'GET #show' do
-    before { get :show, params: { question_id: question, id: answer } }
-
-    it 'renders show view' do
-      expect(response).to render_template :show
-    end
-  end
-
-  describe 'GET #new' do
-    before { get :new, params: { question_id: question } }
-
-    it 'renders new view' do
-      expect(response).to render_template :new
-    end
-  end
-
-  describe 'GET #edit' do
-    context 'as an author of the question' do
-      before { login(user_1) }
-      before { get :edit, params: { id: answer, question_id: question } }
-
-      it 'renders edit view' do
-        expect(response).to render_template :edit
-      end
-    end
-  end
+  let(:answer_2) { create(:answer, question: question, user: user_2) }
+  let(:answer_3) { create(:answer, question: question, user: user_3) }
 
   describe 'POST #create' do
 
@@ -58,7 +20,7 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'redirects to question show view' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer) }, format: :js
+        post :create, params: { question_id: question, answer: attributes_for(:answer), user_id: user_1, format: :js }
         expect(response).to render_template :create
       end
     end
@@ -84,26 +46,26 @@ RSpec.describe AnswersController, type: :controller do
 
       context 'with valid attributes' do
         it 'assigns the requested answer to @answer' do
-          patch :update, params: { question_id: question, id: answer, answer: attributes_for(:answer) }
+          patch :update, params: { question_id: question, id: answer, answer: attributes_for(:answer) }, format: :js
           expect(assigns(:answer)).to eq answer
         end
 
         it 'changes answer attributes' do
-          patch :update, params: { question_id: question, id: answer, answer: { body: 'new body' } }
+          patch :update, params: { question_id: question, id: answer, answer: { body: 'new body' } }, format: :js
           answer.reload
 
           expect(answer.body).to eq 'new body'
         end
 
         it 'redirects to question path' do
-          patch :update, params: { question_id: question, id: answer, answer: attributes_for(:answer) }
+          patch :update, params: { question_id: question, id: answer, answer: attributes_for(:answer) }, format: :js
           expect(response).to redirect_to question_path(question)
         end
       end
 
       context 'with invalid attributes' do
 
-        before { patch :update, params: { question_id: question, id: answer, answer: attributes_for(:answer, :invalid) } }
+        before { patch :update, params: { question_id: question, id: answer, answer: attributes_for(:answer, :invalid) }, format: :js }
         it 'does not change answer' do
           answer.reload
 
@@ -120,14 +82,14 @@ RSpec.describe AnswersController, type: :controller do
       before { sign_out(user_1) }
       before { login(user_2) }
       it 'NOT changes answer attributes' do
-        patch :update, params: { question_id: question, id: answer, answer: { body: 'new body' } }
+        patch :update, params: { question_id: question, id: answer, answer: { body: 'new body' } }, format: :js
         answer.reload
 
         expect(answer.body).to_not eq 'new body'
       end
 
       it 'redirects to question path' do
-        patch :update, params: { question_id: question, id: answer, answer: attributes_for(:answer) }
+        patch :update, params: { question_id: question, id: answer, answer: attributes_for(:answer) }, format: :js
         expect(response).to redirect_to question_path(question)
       end
     end

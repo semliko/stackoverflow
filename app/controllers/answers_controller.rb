@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, only: [:create, :update]
-  before_action :load_question, only: [:index, :new, :edit, :create, :update, :destroy]
+  before_action :load_question, only: [:index, :new, :edit, :create]
   before_action :load_answer, only: [:show, :update, :destroy, :edit]
 
   def index
@@ -22,18 +22,20 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.new(answer_params)
     @answer.user_id = current_user.id
-    redirect_to @question if @answer.save
+    @answer.save
   end
 
   def update
-    if current_user.author_of?(@answer.id)
+    @question = @answer.question
+    if current_user.author_of?(@answer)
       @answer.update(answer_params)
     end
     redirect_to @question
   end
 
   def destroy
-    if current_user.author_of?(@answer.id)
+    @question = @answer.question
+    if current_user.author_of?(@answer)
       @answer.destroy
     end
     redirect_to question_path(@question)

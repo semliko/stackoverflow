@@ -19,9 +19,12 @@ Other users cannot delete my answers
       answer(question)
     end
 
-    scenario 'delete his answer' do
-      #  save_and_open_page
-      click_on 'Destroy'
+    scenario 'delete his answer', js: true do
+      # save_and_open_page
+      visit question_path(question)
+      accept_alert do
+        click_on 'Destroy'
+      end
 
       expect(page).to_not have_content 'Test answer'
     end
@@ -35,9 +38,9 @@ Other users cannot delete my answers
       sign_in(user_2)
     end
 
-    scenario 'cannot delete user_1 answers' do
+    scenario 'cannot delete user_1 answers', js: true do
       visit question_path(question)
-      # save_and_open_page
+      #save_and_open_page
 
       expect(page).to_not have_content 'Destroy'
     end

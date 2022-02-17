@@ -19,7 +19,7 @@ I'd like to be able to add an answer
       visit question_path(question)
     end
 
-    scenario 'ask a question' do
+    scenario 'ask a question', js: true do
       fill_in 'answer_body', with: 'Test answer'
       click_on 'Add Answer'
 
