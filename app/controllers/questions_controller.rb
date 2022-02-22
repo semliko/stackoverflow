@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:show, :edit, :update, :destroy]
+  before_action :load_question, only: [:show, :edit, :update, :destroy, :mark_best_answer]
 
   def index
     @questions = Question.all
@@ -42,7 +42,8 @@ class QuestionsController < ApplicationController
   end
 
   def mark_best_answer
-
+    @question.update_attributes(best_answer_id: params[:answer_id])
+    redirect_to @question
   end
 
   private

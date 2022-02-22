@@ -127,6 +127,7 @@ RSpec.describe QuestionsController, type: :controller do
     context 'with valid attributes' do
       it 'assignns answer as the best answer' do
         patch :mark_best_answer, params: { id: question.id, answer_id: answer_1.id }
+        question.reload
         expect(question.best_answer).to eq answer_1
       end
     end

@@ -27,17 +27,13 @@ class AnswersController < ApplicationController
 
   def update
     @question = @answer.question
-    if current_user.author_of?(@answer)
-      @answer.update(answer_params)
-    end
+    @answer.update(answer_params) if current_user.author_of?(@answer)
     redirect_to @question
   end
 
   def destroy
     @question = @answer.question
-    if current_user.author_of?(@answer)
-      @answer.destroy
-    end
+    @answer.destroy if current_user.author_of?(@answer)
     redirect_to question_path(@question)
   end
 
