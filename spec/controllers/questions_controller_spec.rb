@@ -4,6 +4,7 @@ RSpec.describe QuestionsController, type: :controller do
   let(:user_1) { create(:user) }
   let(:user_2) { create(:user) }
   let(:question) { create(:question, user: user_1) }
+  let(:answer_1) { create(:answer, question: question, user: user_1) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 3, user: user_1) }
@@ -118,6 +119,16 @@ RSpec.describe QuestionsController, type: :controller do
     it 'redirects to index' do
       delete :destroy, params: { id: question }
       expect(response).to redirect_to questions_path
+    end
+  end
+
+  describe 'POST #mark_best_answer' do
+    before { login(user_1) }
+    context 'with valid attributes' do
+      it 'assignns answer as the best answer' do
+        patch :mark_best_answer, params: { id: question.id, answer_id: answer_1.id }
+        expect(question.best_answer).to eq answer_1
+      end
     end
   end
 end

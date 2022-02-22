@@ -41,6 +41,10 @@ class QuestionsController < ApplicationController
     redirect_to questions_path
   end
 
+  def mark_best_answer
+
+  end
+
   private
 
   def load_question
