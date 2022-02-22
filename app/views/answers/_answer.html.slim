@@ -1,7 +1,10 @@
 p= answer.body
+- if answer.best_answer?
+  p= 'Best answer'
 - if user_signed_in?
   - if current_user.author_of?(answer)
     p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+    p= link_to('Mark as the best answer', mark_best_answer_question_path(answer.question, answer_id: answer.id), method: :patch) if !answer.best_answer?
     p= link_to 'Destroy', answer, method: :delete, data: { confirm: 'Are you sure?' }
 
 = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|

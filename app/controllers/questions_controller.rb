@@ -42,7 +42,8 @@ class QuestionsController < ApplicationController
   end
 
   def mark_best_answer
-    @question.update_attributes(best_answer_id: params[:answer_id])
+    @answer = Answer.find(params[:answer_id])
+    @question.update_best_answer(@answer.id) if current_user.author_of?(@answer)
     redirect_to @question
   end
 
