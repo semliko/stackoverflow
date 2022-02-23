@@ -4,6 +4,7 @@ RSpec.describe QuestionsController, type: :controller do
   let(:user_1) { create(:user) }
   let(:user_2) { create(:user) }
   let(:question) { create(:question, user: user_1) }
+  let(:answer_1) { create(:answer, question: question, user: user_1) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 3, user: user_1) }
@@ -118,6 +119,35 @@ RSpec.describe QuestionsController, type: :controller do
     it 'redirects to index' do
       delete :destroy, params: { id: question }
       expect(response).to redirect_to questions_path
+    end
+  end
+
+  describe 'POST #mark_best_answer' do
+    before { login(user_1) }
+    context 'with valid attributes' do
+      it 'assignns answer as the best answer' do
+        patch :mark_best_answer, params: { id: question.id, answer_id: answer_1.id }
+        question.reload
+        expect(question.best_answer).to eq answer_1
+      end
+    end
+  end
+
+  describe 'GET #show returns the best answer instance varible' do
+    before do
+      login(user_1)
+      patch :mark_best_answer, params: { id: question.id, answer_id: answer_1.id }
+      get :show, params: { id: question }
+    end
+
+    context 'when best answer exists' do
+      it 'returns best anwser instance varible' do
+        expect(assigns(:best_answer).id).to eq(answer_1.id)
+      end
+
+      it 'returns other anwers array without best_answer' do
+        expect(assigns(:other_answers).ids).to_not include(answer_1.id)
+      end
     end
   end
 end

@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root 'questions#index'
   resources :questions do
-    resources :answers
+    patch 'mark_best_answer', to: 'questions#mark_best_answer', on: :member
+    resources :answers, shallow: true, only: [:create, :update, :destroy]
   end
 end

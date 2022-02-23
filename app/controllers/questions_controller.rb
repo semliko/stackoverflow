@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:show, :edit, :update, :destroy]
+  before_action :load_question, only: [:show, :edit, :update, :destroy, :mark_best_answer]
 
   def index
     @questions = Question.all
@@ -8,6 +8,8 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
+    @best_answer = @question.best_answer
+    @other_answers = @question.answers.where.not(id: @question.best_answer_id)
   end
 
   def new
@@ -39,6 +41,12 @@ class QuestionsController < ApplicationController
   def destroy
     @question.destroy
     redirect_to questions_path
+  end
+
+  def mark_best_answer
+    @answer = Answer.find(params[:answer_id])
+    @question.update_best_answer(@answer.id) if current_user.author_of?(@answer.user.id)
+    redirect_to @question
   end
 
   private

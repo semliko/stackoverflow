@@ -1,42 +1,27 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, only: [:create, :update]
-  before_action :load_question, only: [:index, :new, :edit, :create, :update, :destroy]
+  before_action :load_question, only: [:index, :new, :edit, :create]
   before_action :load_answer, only: [:show, :update, :destroy, :edit]
-
-  def index
-    @answers = @question.answers
-  end
-
-  def show
-
-  end
 
   def new
     @answer = @question.answers.build
   end
 
-  def edit
-
-  end
-
   def create
-    @answer = @question.answers.create(answer_params)
+    @answer = @question.answers.new(answer_params)
     @answer.user_id = current_user.id
     @answer.save
-    redirect_to question_path(@question)
   end
 
   def update
-    if current_user.author_of?(@answer.id)
-      @answer.update(answer_params)
-    end
-    redirect_to question_path(@question)
+    @question = @answer.question
+    @answer.update(answer_params) if current_user.author_of?(@answer.user.id)
+    redirect_to @question
   end
 
   def destroy
-    if current_user.author_of?(@answer.id)
-      @answer.destroy
-    end
+    @question = @answer.question
+    @answer.destroy if current_user.author_of?(@answer.user.id)
     redirect_to question_path(@question)
   end
 

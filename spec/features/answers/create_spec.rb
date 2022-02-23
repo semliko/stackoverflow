@@ -19,15 +19,23 @@ I'd like to be able to add an answer
       visit question_path(question)
     end
 
-    scenario 'ask a question' do
+    scenario 'ask a question', js: true do
       fill_in 'answer_body', with: 'Test answer'
       click_on 'Add Answer'
 
       expect(page).to have_content 'Test answer'
     end
+
+    scenario 'Authenticated user creates answer with errors', js: true do
+      visit question_path(question)
+
+      click_on 'Add Answer'
+
+      expect(page).to have_content("Body can't be blank")
+    end
   end
 
-  scenario 'Unauthenticated user create answer  with errors' do
+  scenario 'Unauthenticated user create answer  with errors', js: true do
     visit question_path(question)
     # save_and_open_page
     fill_in 'answer_body', with: 'Test answer'
