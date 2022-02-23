@@ -3,20 +3,16 @@ class AnswersController < ApplicationController
   before_action :load_question, only: [:index, :new, :edit, :create]
   before_action :load_answer, only: [:show, :update, :destroy, :edit]
 
-  def index
-    @answers = @question.answers
-  end
-
-  def show
-
-  end
+  #  def index
+  #    dd
+  #    @answers = []
+  #    best_answer = @question.best_answer·
+  #    @answers << best_answer if best_answer
+  #    @answers << @question.answers.where.not(id: best_answer.id)
+  #  end
 
   def new
     @answer = @question.answers.build
-  end
-
-  def edit
-
   end
 
   def create

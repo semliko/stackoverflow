@@ -8,4 +8,10 @@ class Question < ApplicationRecord
   def update_best_answer(answer_id)
     update_attribute(:best_answer_id, answer_id)
   end
+
+  def ordered_answers
+    #  answers_ids = []
+    #  answers_ids << best_answer.id if best_answer
+    #  answers_ids = answers_ids + self.answers.where.not(id: best_answer.id).ids
+  end
 end
