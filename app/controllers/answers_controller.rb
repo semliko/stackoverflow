@@ -3,14 +3,6 @@ class AnswersController < ApplicationController
   before_action :load_question, only: [:index, :new, :edit, :create]
   before_action :load_answer, only: [:show, :update, :destroy, :edit]
 
-  #  def index
-  #    dd
-  #    @answers = []
-  #    best_answer = @question.best_answer·
-  #    @answers << best_answer if best_answer
-  #    @answers << @question.answers.where.not(id: best_answer.id)
-  #  end
-
   def new
     @answer = @question.answers.build
   end
@@ -23,13 +15,13 @@ class AnswersController < ApplicationController
 
   def update
     @question = @answer.question
-    @answer.update(answer_params) if current_user.author_of?(@answer)
+    @answer.update(answer_params) if current_user.author_of?(@answer.user.id)
     redirect_to @question
   end
 
   def destroy
     @question = @answer.question
-    @answer.destroy if current_user.author_of?(@answer)
+    @answer.destroy if current_user.author_of?(@answer.user.id)
     redirect_to question_path(@question)
   end
 
