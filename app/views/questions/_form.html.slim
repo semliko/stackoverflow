@@ -8,5 +8,9 @@
     = f.label :body
     br
     = f.text_area :body
+  div.field
+    = f.label :files
+    br
+    = f.file_field :files, multiple: true
   div.action
     = f.submit 'Ask'
