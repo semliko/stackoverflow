@@ -11,22 +11,11 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params)
     @answer.user_id = current_user.id
     @answer.save
-    #respond_to do |format|
-    #  format.html
-    #  format.json {render json: @answer, status: :ok}
-    #  format.js
-    #end
   end
 
   def update
     @question = @answer.question
     @answer.update(answer_params) if current_user.author_of?(@answer.user.id)
-    #respond_to do |format|
-    #  format.html
-    #  format.json {render json: @answer, status: :ok}
-    #  format.js
-    #end
-    #redirect_to @question
   end
 
   def destroy
