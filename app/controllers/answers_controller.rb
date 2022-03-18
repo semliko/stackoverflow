@@ -11,12 +11,22 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params)
     @answer.user_id = current_user.id
     @answer.save
+    #respond_to do |format|
+    #  format.html
+    #  format.json {render json: @answer, status: :ok}
+    #  format.js
+    #end
   end
 
   def update
     @question = @answer.question
     @answer.update(answer_params) if current_user.author_of?(@answer.user.id)
-    redirect_to @question
+    #respond_to do |format|
+    #  format.html
+    #  format.json {render json: @answer, status: :ok}
+    #  format.js
+    #end
+    #redirect_to @question
   end
 
   def destroy
@@ -28,7 +38,7 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer).permit(:question_id, :body)
+    params.require(:answer).permit(:question_id, :body, files: [])
   end
 
   def load_question

@@ -19,11 +19,19 @@ I'd like to be able to add an answer
       visit question_path(question)
     end
 
-    scenario 'ask a question', js: true do
+    scenario 'answer a question', js: true do
       fill_in 'answer_body', with: 'Test answer'
       click_on 'Add Answer'
 
       expect(page).to have_content 'Test answer'
+    end
+
+    scenario 'answer a question with file', js: true do
+      fill_in 'answer_body', with: 'Test answer 2'
+      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+      click_on 'Add Answer'
+
+      expect(page).to have_link 'rails_helper.rb'
     end
 
     scenario 'Authenticated user creates answer with errors', js: true do

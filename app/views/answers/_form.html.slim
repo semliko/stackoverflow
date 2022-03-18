@@ -4,5 +4,8 @@
 = form_with model: answer.new_record? ? [question, answer] : answer, local: false do |f|
   = f.label :body
     = f.text_area :body
+    = f.label :files
+    br
+    = f.file_field :files, multiple: true
   div.action
     = f.submit 'Add Answer'

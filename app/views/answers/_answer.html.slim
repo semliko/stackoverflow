@@ -1,4 +1,8 @@
 p= answer.body
+- if answer.files.attached?
+  -  answer.files.each do |file|
+    p= link_to file.filename.to_s, url_for(file)
+
 - if answer.best_answer?
   p= 'Best answer'
 - if user_signed_in?
@@ -7,7 +11,9 @@ p= answer.body
     p= link_to('Mark as the best answer', mark_best_answer_question_path(answer.question, answer_id: answer.id), method: :patch) if !answer.best_answer?
     p= link_to 'Destroy', answer, method: :delete, data: { confirm: 'Are you sure?' }
 
-= form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
+= form_with(model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false) do |f|
   = f.label :body, 'Your answer'
   = f.text_area :body
+    br
+    = f.file_field :files, multiple: true
   = f.submit 'Save'
