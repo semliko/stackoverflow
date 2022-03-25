@@ -25,8 +25,8 @@ class AnswersController < ApplicationController
   end
 
   def delete_attached_file
-    if current_user.author_of?(@answer)
-      @answer_file = ActiveStorage::Blob.find_signed(params[:id])
+    if current_user.author_of?(@answer.user.id)
+      @answer_file = ActiveStorage::Attachment.find(params[:file_id])
       @answer_file.purge_later
     end
   end

@@ -4,6 +4,10 @@ Rails.application.routes.draw do
   root 'questions#index'
   resources :questions do
     patch 'mark_best_answer', to: 'questions#mark_best_answer', on: :member
-    resources :answers, shallow: true, only: [:create, :update, :destroy]
+    resources :answers, shallow: true, only: [:create, :update, :destroy, :delete_attached_file] do
+      member do
+        delete :delete_attached_file
+      end
+    end
   end
 end
