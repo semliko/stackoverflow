@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :update]
+  before_action :authenticate_user!, only: [:create, :update, :destroy, :delete_attached_file]
   before_action :load_question, only: [:index, :new, :edit, :create]
-  before_action :load_answer, only: [:show, :update, :destroy, :edit]
+  before_action :load_answer, only: [:show, :update, :destroy, :edit, :delete_attached_file]
 
   def new
     @answer = @question.answers.build
@@ -22,6 +22,13 @@ class AnswersController < ApplicationController
     @question = @answer.question
     @answer.destroy if current_user.author_of?(@answer.user.id)
     redirect_to question_path(@question)
+  end
+
+  def delete_attached_file
+    if current_user.author_of?(@answer)
+      @answer_file = ActiveStorage::Blob.find_signed(params[:id])
+      @answer_file.purge_later
+    end
   end
 
   private

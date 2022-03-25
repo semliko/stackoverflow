@@ -72,7 +72,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    context 'as an author of the question' do
+    context 'as an author of the answer' do
       before { login(user_1) }
 
       let!(:answer) { create(:answer, question: question, user: user_1) }
@@ -86,7 +86,7 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'as NOT an author of the question' do
+    context 'as NOT an author of the answer' do
       before { sign_out(user_1) }
       before { login(user_2) }
 
@@ -102,4 +102,19 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+
+  describe 'DELETE #delete_attached_file' do
+    context 'as an author of the answer' do
+      before do
+        login(user_1)
+      end
+      let!(:file_1){ fixture_file_upload "#{Rails.root}/spec/rails_helper.rb" }
+      #expect { post :create, params: { question_id: question, user_id: user_1, answer: attributes_for(:answer).merge{files: [file]} }, format: :js }.to change(question.answers, :count).by(1)
+      let!(:answer) { create(:answer, question: question, user: user_1, files: [file_1]) }
+      it 'deletes the answer' do
+        file = answer.files.first
+        expect { patch :delete_attached_file, params: { question_id: question, id: answer, file_id: file.id } }.to change(answer.files, :count).by(-1)
+      end
+    end
+  end
 end
