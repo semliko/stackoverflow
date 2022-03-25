@@ -15,5 +15,6 @@ p= answer.body
   = f.label :body, 'Your answer'
   = f.text_area :body
     br
-    = f.file_field :files, multiple: true
+  = f.label :files
+  = f.file_field :files, multiple: true
   = f.submit 'Save'

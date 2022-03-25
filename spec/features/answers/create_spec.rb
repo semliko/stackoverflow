@@ -27,7 +27,7 @@ I'd like to be able to add an answer
     end
 
     scenario 'answer a question with file', js: true do
-      fill_in 'answer_body', with: 'Test answer 2'
+      fill_in 'answer_body', match: :first, with: 'Test answer 2'
       attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
       click_on 'Add Answer'
 
@@ -37,7 +37,7 @@ I'd like to be able to add an answer
     scenario 'Authenticated user creates answer with errors', js: true do
       visit question_path(question)
 
-      click_on 'Add Answer'
+      click_on 'Add Answer', match: :first
 
       expect(page).to have_content("Body can't be blank")
     end
