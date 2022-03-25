@@ -28,6 +28,7 @@ class AnswersController < ApplicationController
     if current_user.author_of?(@answer.user.id)
       @answer_file = ActiveStorage::Attachment.find(params[:file_id])
       @answer_file.purge_later
+      redirect_to @answer.question
     end
   end
 
