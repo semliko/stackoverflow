@@ -42,6 +42,16 @@ feature 'User can edit his answer', %q{
       expect(page).to have_link 'rails_helper.rb'
     end
 
+    scenario 'delete file from answer', js: true do
+      sign_in user
+      visit question_path(question)
+      fill_in 'answer_body', match: :first, with: 'Test answer 3'
+      attach_file 'File', ["#{Rails.root}/spec/support/files/answers/answer.txt"], match: :first
+      click_on 'Save'
+      click_on 'Delete File', match: :first
+      expect(page).to_not have_link 'answer.txt'
+    end
+
     scenario 'edits his answer with errors', js: true do
       sign_in user
       visit question_path(question)
