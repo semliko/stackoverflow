@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:show, :edit, :update, :destroy, :mark_best_answer]
+  before_action :authenticate_user!, except: [:index, :show, :delete_attached_file]
+  before_action :load_question, only: [:show, :edit, :update, :destroy, :mark_best_answer, :delete_attached_file]
 
   def index
     @questions = Question.all
@@ -47,6 +47,14 @@ class QuestionsController < ApplicationController
     @answer = Answer.find(params[:answer_id])
     @question.update_best_answer(@answer.id) if current_user.author_of?(@answer.user.id)
     redirect_to @question
+  end
+
+  def delete_attached_file
+    if current_user.author_of?(@question.user.id)
+      @answer_file = ActiveStorage::Attachment.find(params[:file_id])
+      @answer_file.purge_later
+      redirect_to @question
+    end
   end
 
   private
