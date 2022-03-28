@@ -4,6 +4,7 @@ h1= @question.body
 - if @question.files.attached?
   - @question.files.each do |file|
     p= link_to file.filename.to_s, url_for(file)
+    p= link_to 'Delete File', delete_attached_file_question_path(id: @question.id, file_id: file.id), method: :delete
 
 .answers
   = render @best_answer if @best_answer

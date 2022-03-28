@@ -29,7 +29,6 @@ I'd like to be able to ask the quetion
 
     scenario 'ask a question with errors' do
       click_on 'Ask'
-
       #  save_and_open_page
       expect(page).to have_content "Title can't be blank"
     end
