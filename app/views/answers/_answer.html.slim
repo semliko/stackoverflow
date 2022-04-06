@@ -2,7 +2,7 @@ p= answer.body
 - if answer.files.attached?
   -  answer.files.each do |file|
     p= link_to file.filename.to_s, url_for(file)
-    p= link_to 'Delete File', delete_attached_file_answer_path(id: answer.id, file_id: file.id), method: :delete
+    p= link_to 'Delete File', attached_file_path(id: file.id), method: :delete
 
 - if answer.best_answer?
   p= 'Best answer'
