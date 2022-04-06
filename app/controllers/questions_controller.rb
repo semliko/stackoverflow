@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:show, :edit, :update, :destroy, :mark_best_answer]
+  before_action :authenticate_user!, except: [:index, :show, :delete_attached_file]
+  before_action :load_question, only: [:show, :edit, :update, :destroy, :mark_best_answer, :delete_attached_file]
 
   def index
     @questions = Question.all
@@ -31,7 +31,8 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
+    if current_user.author_of?(@question.user.id) &&
+        @question.update(question_params)
       redirect_to @question
     else
       render :edit
@@ -52,12 +53,12 @@ class QuestionsController < ApplicationController
   private
 
   def load_question
-    @question = Question.find(params[:id])
+    @question = Question.with_attached_files.find(params[:id])
   end
 
   helper_method :question
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, files: [])
   end
 end

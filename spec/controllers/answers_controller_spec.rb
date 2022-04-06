@@ -18,22 +18,12 @@ RSpec.describe AnswersController, type: :controller do
         expect { post :create, params: { question_id: question, user_id: user_1, answer: attributes_for(:answer) }, format: :js }.to change(question.answers, :count).by(1)
         expect { post :create, params: { question_id: question, user_id: user_1, answer: attributes_for(:answer) }, format: :js }.to change(user_1.answers, :count).by(1)
       end
-
-      it 'redirects to question show view' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer), user_id: user_1, format: :js }
-        expect(response).to render_template :create
-      end
     end
 
     context 'with invalid attributes' do
       before { login(user_1) }
       it 'does not save the answer' do
         expect { post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }, format: :js }.to_not change(question.answers, :count)
-      end
-
-      it 'redirects to show view' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid), format: :js}
-        expect(response).to render_template :create
       end
     end
   end
@@ -56,11 +46,6 @@ RSpec.describe AnswersController, type: :controller do
 
           expect(answer.body).to eq 'new body'
         end
-
-        it 'redirects to question path' do
-          patch :update, params: { question_id: question, id: answer, answer: attributes_for(:answer) }, format: :js
-          expect(response).to redirect_to question_path(question)
-        end
       end
 
       context 'with invalid attributes' do
@@ -70,10 +55,6 @@ RSpec.describe AnswersController, type: :controller do
           answer.reload
 
           expect(answer.body).to eq 'MyText'
-        end
-
-        it 'redirects to question_path' do
-          expect(response).to redirect_to question_path(question)
         end
       end
     end
@@ -87,16 +68,11 @@ RSpec.describe AnswersController, type: :controller do
 
         expect(answer.body).to_not eq 'new body'
       end
-
-      it 'redirects to question path' do
-        patch :update, params: { question_id: question, id: answer, answer: attributes_for(:answer) }, format: :js
-        expect(response).to redirect_to question_path(question)
-      end
     end
   end
 
   describe 'DELETE #destroy' do
-    context 'as an author of the question' do
+    context 'as an author of the answer' do
       before { login(user_1) }
 
       let!(:answer) { create(:answer, question: question, user: user_1) }
@@ -110,7 +86,7 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'as NOT an author of the question' do
+    context 'as NOT an author of the answer' do
       before { sign_out(user_1) }
       before { login(user_2) }
 
@@ -125,5 +101,4 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
-
 end

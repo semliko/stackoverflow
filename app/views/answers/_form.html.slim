@@ -4,5 +4,9 @@
 = form_with model: answer.new_record? ? [question, answer] : answer, local: false do |f|
   = f.label :body
     = f.text_area :body
+    = f.label :files
+    br
+    = f.label :files
+    = f.file_field :files, multiple: true, direct_upload: true
   div.action
     = f.submit 'Add Answer'

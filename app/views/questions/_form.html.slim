@@ -1,5 +1,9 @@
-=render 'shared/errors', resource: question
-= form_with model: question, local: true do |f|
+=render 'shared/errors', resource: @question
+- if @question.files.attached?
+  -  @question.files.each do |file|
+    p= link_to file.filename.to_s, url_for(file)
+    p= link_to 'Delete File', attached_file_path(id: file.id), method: :delete
+= form_with model: @question, local: true do |f|
   div.field
     = f.label :title, 'Title'
     br
@@ -8,5 +12,9 @@
     = f.label :body
     br
     = f.text_area :body
+  div.field
+    = f.label :files
+    br
+    = f.file_field :files, multiple: true, direct_upload: true
   div.action
     = f.submit 'Ask'
