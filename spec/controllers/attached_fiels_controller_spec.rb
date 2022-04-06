@@ -7,7 +7,7 @@ RSpec.describe AttachedFilesController, type: :controller do
   let(:question) { create(:question, user: user_1) }
 
   describe 'DELETE #delete_attached_file' do
-    context 'as an author of the answer' do
+    context 'as an author of the file' do
       before do
         login(user_1)
       end
@@ -22,7 +22,7 @@ RSpec.describe AttachedFilesController, type: :controller do
   end
 
   describe 'DELETE #delete_attached_file' do
-    context 'as NOT an author of the answer' do
+    context 'as NOT an author of the file' do
       before do
         login(user_1)
       end
