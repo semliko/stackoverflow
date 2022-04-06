@@ -50,14 +50,6 @@ class QuestionsController < ApplicationController
     redirect_to @question
   end
 
-  def delete_attached_file
-    if current_user.author_of?(@question.user.id)
-      @answer_file = ActiveStorage::Attachment.find(params[:file_id])
-      @answer_file.purge_later
-      redirect_to @question
-    end
-  end
-
   private
 
   def load_question
