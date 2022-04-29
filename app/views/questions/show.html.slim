@@ -6,6 +6,12 @@ h1= @question.body
     p= link_to file.filename.to_s, url_for(file)
     p= link_to 'Delete File', attached_file_path(id: file.id), method: :delete
 
+.links
+  p Links:
+  ul
+    - @question.links.each do |link|
+      li= link_to link.name, link.url
+
 .answers
   = render @best_answer if @best_answer
   = render @other_answers

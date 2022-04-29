@@ -4,6 +4,12 @@ p= answer.body
     p= link_to file.filename.to_s, url_for(file)
     p= link_to 'Delete File', attached_file_path(id: file.id), method: :delete
 
+.links
+  p Links:
+  ul
+    - answer.links.each do |link|
+      li= link_to link.name, link.url
+
 - if answer.best_answer?
   p= 'Best answer'
 - if user_signed_in?

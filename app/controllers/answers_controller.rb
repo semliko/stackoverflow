@@ -27,7 +27,8 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer).permit(:question_id, :body, files: [])
+    params.require(:answer).permit(:question_id, :body, files: [],
+                                   links_attributes: [:name, :url])
   end
 
   def load_question
