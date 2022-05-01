@@ -19,6 +19,7 @@ class QuestionsController < ApplicationController
   end
 
   def edit
+    @question.links.new if @question.links.empty?
   end
 
   def create
@@ -56,6 +57,10 @@ class QuestionsController < ApplicationController
 
   def load_question
     @question = Question.with_attached_files.find(params[:id])
+  end
+
+  def initialize_links
+    @question.links.new
   end
 
   helper_method :question
