@@ -7,6 +7,7 @@ class Answer < ApplicationRecord
   has_many_attached :files
 
   accepts_nested_attributes_for :links, reject_if: :all_blank
+  validates_associated :links
 
   validates :body, presence: true, allow_blank: false
 

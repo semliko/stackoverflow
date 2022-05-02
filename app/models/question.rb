@@ -7,11 +7,13 @@ class Question < ApplicationRecord
   has_many_attached :files
 
   accepts_nested_attributes_for :links, reject_if: :all_blank
+  validates_associated :links
 
   validates :title, :body, presence: true
 
   def update_best_answer(answer_id)
     update_attribute(:best_answer_id, answer_id)
   end
+
 
 end

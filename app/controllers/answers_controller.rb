@@ -5,6 +5,7 @@ class AnswersController < ApplicationController
 
   def new
     @answer = @question.answers.build
+    @answer.links.new
   end
 
   def create
