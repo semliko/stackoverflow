@@ -25,4 +25,20 @@ I'd like to be able to add links
       expect(page).to have_link 'My gist', href: gist_url
     end
   end
+
+  scenario 'User can delete link from his answer', js: true do
+    sign_in(user)
+    visit question_path(question)
+    fill_in 'answer_body', with: 'Test answer'
+
+    fill_in 'Link name', with: 'My gist'
+    fill_in 'Url', with: gist_url
+
+    click_on 'Add Answer'
+    click_on 'Delete link'
+
+    within '.answers' do
+      expect(page).to_not have_link 'My gist', href: gist_url
+    end
+  end
 end
