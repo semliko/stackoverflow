@@ -9,4 +9,5 @@ Rails.application.routes.draw do
     resources :answers, shallow: true, only: [:create, :update, :destroy] do
     end
   end
+  resources :users, only:[:show]
 end

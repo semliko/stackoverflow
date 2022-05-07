@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_12_082201) do
+ActiveRecord::Schema.define(version: 2022_05_03_134616) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -40,6 +40,17 @@ ActiveRecord::Schema.define(version: 2022_04_12_082201) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id"
     t.index ["question_id"], name: "index_answers_on_question_id"
+  end
+
+  create_table "awards", force: :cascade do |t|
+    t.string "name"
+    t.string "awardable_type"
+    t.integer "awardable_id"
+    t.integer "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["awardable_type", "awardable_id"], name: "index_awards_on_awardable_type_and_awardable_id"
+    t.index ["user_id"], name: "index_awards_on_user_id"
   end
 
   create_table "links", force: :cascade do |t|
@@ -76,4 +87,5 @@ ActiveRecord::Schema.define(version: 2022_04_12_082201) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "answers", "questions"
+  add_foreign_key "awards", "users"
 end
