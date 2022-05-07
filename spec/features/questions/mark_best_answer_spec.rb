@@ -28,11 +28,11 @@ I'd like to mark the the best answer
     end
   end
 
-  # describe 'Authenticated user that is NOT question author' do
-  #   scenario 'cannot mark the best question' do
-  #     sign_in(user_2)
-  #     visit question_path(question)
-  #     expect(page).to_not have_content 'Mark as the best answer'
-  #   end
-  # end
+  describe 'Authenticated user that is NOT question author' do
+    scenario 'cannot mark the best question' do
+      sign_in(user_2)
+      visit question_path(question)
+      expect(page).to_not have_content 'Mark as the best answer'
+    end
+  end
 end
