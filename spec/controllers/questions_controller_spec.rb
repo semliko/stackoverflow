@@ -3,7 +3,8 @@ require 'rails_helper'
 RSpec.describe QuestionsController, type: :controller do
   let(:user_1) { create(:user) }
   let(:user_2) { create(:user) }
-  let(:question) { create(:question, user: user_1) }
+  let(:question_attr) { attributes_for(:question) }
+  let(:question) { create(:question, {user: user_1}.merge(question_attr)) }
   let(:answer_1) { create(:answer, question: question, user: user_1) }
 
   describe 'GET #index' do

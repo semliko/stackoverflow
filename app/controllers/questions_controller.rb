@@ -54,7 +54,7 @@ class QuestionsController < ApplicationController
     @answer = Answer.find(params[:answer_id])
     user_id = @answer.user.id
     if current_user.author_of?(user_id)
-      @question.update_best_answer(user_id)
+      @question.update_best_answer(@answer.id)
       @question.assign_awards
       @question.award_user(user_id)
     end

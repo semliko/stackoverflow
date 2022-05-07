@@ -15,4 +15,8 @@ class Answer < ApplicationRecord
   def best_answer?
     id == question.best_answer&.id
   end
+
+  def title
+    question.title
+  end
 end
