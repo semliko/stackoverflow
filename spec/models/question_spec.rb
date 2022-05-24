@@ -6,6 +6,8 @@ RSpec.describe Question, type: :model do
     it { should have_many :answers }
     it { should belong_to(:user).class_name('User') }
     it { should belong_to(:best_answer).class_name('Answer').optional }
+    it { should accept_nested_attributes_for :links }
+    it { should accept_nested_attributes_for :awards }
   end
 
   describe 'validations' do

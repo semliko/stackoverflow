@@ -11,27 +11,27 @@ I'd like to mark the the best answer
   given(:user_2) { create(:user) }
   given(:question) { create(:question, user: user) }
   given(:answer_1) { create(:answer, user: user, question: question) }
+  given(:badge_file) { "#{Rails.root}/spec/support/files/awards/star.png" }
 
   describe 'Authenticated user as question author' do
-    scenario 'ask a question' do
+    scenario 'mark the best answer with award' do
+      award = Award.new(name: 'test')
+      question.awards.build(award.attributes).save
+      question.awards.first.file.attach(io: File.open(badge_file), filename: 'star.png')
+      answer_1.reload
       sign_in(user)
-      visit questions_path
+      visit question_path(question)
       click_on 'Mark as the best answer'
-      #  save_and_open_page
+      #save_and_open_page
       expect(page).to have_content 'Best answer'
-    end
-  end
-
-  describe 'Unauthenticated user asks a question with errors' do
-    scenario 'cannot mark the best question' do
-      expect(page).to_not have_content 'Mark as the best answer'
+      expect(page).to have_css("img[src*='star.png']")
     end
   end
 
   describe 'Authenticated user that is NOT question author' do
     scenario 'cannot mark the best question' do
       sign_in(user_2)
-      visit questions_path
+      visit question_path(question)
       expect(page).to_not have_content 'Mark as the best answer'
     end
   end

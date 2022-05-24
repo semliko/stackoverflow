@@ -8,15 +8,21 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
+    @awards = @question.awards
     @best_answer = @question.best_answer
     @other_answers = @question.answers.where.not(id: @question.best_answer_id)
+    @answer.links.new
   end
 
   def new
     @question = Question.new
+    @question.links.new
+    @question.awards.new
   end
 
   def edit
+    @question.links.new if @question.links.empty?
+    @question.awards.new if @question.awards.empty?
   end
 
   def create
@@ -46,7 +52,12 @@ class QuestionsController < ApplicationController
 
   def mark_best_answer
     @answer = Answer.find(params[:answer_id])
-    @question.update_best_answer(@answer.id) if current_user.author_of?(@answer.user.id)
+    user_id = @answer.user.id
+    if current_user.author_of?(user_id)
+      @question.update_best_answer(@answer.id)
+      @question.assign_awards
+      @question.award_user(user_id)
+    end
     redirect_to @question
   end
 
@@ -56,9 +67,14 @@ class QuestionsController < ApplicationController
     @question = Question.with_attached_files.find(params[:id])
   end
 
+  def initialize_links
+    @question.links.new
+  end
+
   helper_method :question
 
   def question_params
-    params.require(:question).permit(:title, :body, files: [])
+    params.require(:question).permit(:title, :body, files: [],
+                                     links_attributes: [:name, :url], awards_attributes: [:name, :file])
   end
 end

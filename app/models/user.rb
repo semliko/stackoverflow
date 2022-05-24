@@ -5,6 +5,8 @@ class User < ApplicationRecord
     :recoverable, :rememberable, :validatable
   has_many :questions
   has_many :answers
+  has_many :awards,  dependent: :destroy
+
 
   def author_of?(user_id)
     user_id == id

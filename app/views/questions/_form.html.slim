@@ -3,6 +3,7 @@
   -  @question.files.each do |file|
     p= link_to file.filename.to_s, url_for(file)
     p= link_to 'Delete File', attached_file_path(id: file.id), method: :delete
+    br
 = form_with model: @question, local: true do |f|
   div.field
     = f.label :title, 'Title'
@@ -12,9 +13,22 @@
     = f.label :body
     br
     = f.text_area :body
+    br
   div.field
     = f.label :files
     br
     = f.file_field :files, multiple: true, direct_upload: true
+    br
+    p Links:
+    p
+      = f.fields_for :links do |l|
+        = render 'links/link_fields', f: l
+    div.links
+      = link_to_add_association 'add link', f, :links, partial: 'links/link_fields'
+
+    p Awards:
+    p
+      = f.fields_for :awards do |l|
+        = render 'awards/award_fields', f: l
   div.action
     = f.submit 'Ask'

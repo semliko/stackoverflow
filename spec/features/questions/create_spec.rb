@@ -7,6 +7,7 @@ I'd like to be able to ask the quetion
 ) do
 
   given(:user) { create(:user) }
+  given(:badge_file) { "#{Rails.root}/spec/support/files/awards/star.png" }
 
   describe 'Authenticated user' do
 
@@ -40,6 +41,18 @@ I'd like to be able to ask the quetion
       click_on 'Ask'
 
       expect(page).to have_link 'rails_helper.rb'
+    end
+
+    scenario 'ask a question with award' do
+      fill_in 'Title', with: 'Test question'
+      fill_in 'Body', with: 'text text text'
+
+      #save_and_open_page
+      fill_in 'Award name', with: 'Test Award'
+      attach_file 'Award badge', badge_file
+      click_on 'Ask'
+      binding.pry
+      expect(page).to have_css("img[src*='star.png']")
     end
   end
 

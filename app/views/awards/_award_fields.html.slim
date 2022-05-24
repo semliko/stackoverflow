@@ -1,0 +1,9 @@
+.nested-fields
+  .field
+    = f.label :name, 'Award name'
+    = f.text_field :name
+  .field
+    = f.label :file, 'Award badge'
+    br
+    = f.file_field :file, direct_upload: true
+  = link_to_remove_association "remove link", f

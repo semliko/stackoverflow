@@ -4,8 +4,18 @@ p= answer.body
     p= link_to file.filename.to_s, url_for(file)
     p= link_to 'Delete File', attached_file_path(id: file.id), method: :delete
 
+.links
+  p Links:
+  ul
+    - answer.links.each do |link|
+      li= render link
+
 - if answer.best_answer?
   p= 'Best answer'
+  ul
+    - answer.awards.each do |award|
+      li = render award
+
 - if user_signed_in?
   - if current_user.author_of?(answer.user.id)
     p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
