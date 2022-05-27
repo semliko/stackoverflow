@@ -51,7 +51,6 @@ I'd like to be able to ask the quetion
       fill_in 'Award name', with: 'Test Award'
       attach_file 'Award badge', badge_file
       click_on 'Ask'
-      binding.pry
       expect(page).to have_css("img[src*='star.png']")
     end
   end
