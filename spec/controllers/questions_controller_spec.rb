@@ -156,7 +156,7 @@ RSpec.describe QuestionsController, type: :controller do
     before { login(user_1) }
     context 'with valid attributes' do
       it 'adding upvote to question' do
-        patch :make_vote, params: { id: question.id, vote: { vote_type: :upvote } }
+        patch :make_vote, params: { id: question.id, vote: { vote_type: :upvote } }, format: :json
         question.reload
         expect(question.votes.upvote.count).to eq 1
       end
@@ -167,7 +167,7 @@ RSpec.describe QuestionsController, type: :controller do
     before { login(user_1) }
     context 'with valid attributes' do
       it 'adding upvote to question' do
-        patch :make_vote, params: { id: question.id, vote: { vote_type: :downvote } }
+        patch :make_vote, params: { id: question.id, vote: { vote_type: :downvote } }, format: :json
         question.reload
         expect(question.votes.downvote.count).to eq 1
       end
