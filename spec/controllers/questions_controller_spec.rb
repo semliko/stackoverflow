@@ -152,6 +152,27 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+  describe 'POST #upvote' do
+    before { login(user_1) }
+    context 'with valid attributes' do
+      it 'adding upvote to question' do
+        patch :make_vote, params: { id: question.id, vote: { vote_type: :upvote } }
+        question.reload
+        expect(question.votes.upvote.count).to eq 1
+      end
+    end
+  end
+
+  describe 'POST #downvote' do
+    before { login(user_1) }
+    context 'with valid attributes' do
+      it 'adding upvote to question' do
+        patch :make_vote, params: { id: question.id, vote: { vote_type: :downvote } }
+        question.reload
+        expect(question.votes.downvote.count).to eq 1
+      end
+    end
+  end
   describe 'GET #show returns the best answer instance varible' do
     before do
       login(user_1)
