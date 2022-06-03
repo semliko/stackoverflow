@@ -1,0 +1,13 @@
+
+.votes
+  .upvote_count
+    p= "Upvotes #{resource.upvotes_count}"
+  .downvote_count
+    p= "Downvotes #{resource.downvotes_count}"
+  .total_votes_count
+    p= "Toal votes #{resource.total_votes_count}"
+
+  - if current_user
+      p= link_to 'Upvote', polymorphic_path([:make_vote, resource], vote: { vote_type: :upvote }), method: :patch, remote: true, class: 'votable'
+      p= link_to 'Downvote', polymorphic_path([:make_vote, resource], vote: { vote_type: :downvote }), method: :patch, remote: true, class: 'votable'
+

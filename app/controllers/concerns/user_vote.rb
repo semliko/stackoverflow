@@ -13,6 +13,9 @@ module UserVote
        user_id: current_user.id,
        votable_type: model_klass.name,
        votable_id: votable_obj.id }, unique_by: [:votable_id, :votable_type, :user_id])
+    respond_to do |format|
+      format.json { render json: votable_obj.votes_count }
+    end
   end
 
   private

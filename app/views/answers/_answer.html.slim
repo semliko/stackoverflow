@@ -16,6 +16,8 @@ p= answer.body
     - answer.awards.each do |award|
       li = render award
 
+=render 'votes/show', resource: answer
+
 - if user_signed_in?
   - if current_user.author_of?(answer.user.id)
     p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
