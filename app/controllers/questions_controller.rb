@@ -1,4 +1,6 @@
 class QuestionsController < ApplicationController
+
+  include UserVote
   before_action :authenticate_user!, except: [:index, :show, :delete_attached_file]
   before_action :load_question, only: [:show, :edit, :update, :destroy, :mark_best_answer, :delete_attached_file]
 

@@ -6,6 +6,8 @@ h1= @question.body
     p= link_to file.filename.to_s, url_for(file)
     p= link_to 'Delete File', attached_file_path(id: file.id), method: :delete
 
+=render 'votes/show', resource: @question
+
 .links
   p Links:
   ul

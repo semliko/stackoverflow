@@ -29,6 +29,27 @@ RSpec.describe AnswersController, type: :controller do
   end
 
 
+  describe 'POST #upvote' do
+    before { login(user_1) }
+    context 'with valid attributes' do
+      it 'adding upvote to question' do
+        patch :make_vote, params: { id: answer.id, vote: { vote_type: :upvote } }, format: :json
+        answer.reload
+        expect(answer.votes.upvote.count).to eq 1
+      end
+    end
+  end
+
+  describe 'POST #downvote' do
+    before { login(user_1) }
+    context 'with valid attributes' do
+      it 'adding upvote to question' do
+        patch :make_vote, params: { id: answer.id, vote: { vote_type: :downvote } }, format: :json
+        answer.reload
+        expect(answer.votes.downvote.count).to eq 1
+      end
+    end
+  end
 
   describe 'POST #update' do
     context 'as an author of the question' do

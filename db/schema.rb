@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_03_134616) do
+ActiveRecord::Schema.define(version: 2022_05_27_103107) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -85,7 +85,18 @@ ActiveRecord::Schema.define(version: 2022_05_03_134616) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "votes", force: :cascade do |t|
+    t.integer "vote_type"
+    t.integer "user_id", null: false
+    t.string "votable_type", null: false
+    t.integer "votable_id", null: false
+    t.index ["user_id"], name: "index_votes_on_user_id"
+    t.index ["votable_id", "votable_type", "user_id"], name: "index_votes_on_votable_id_and_votable_type_and_user_id", unique: true
+    t.index ["votable_type", "votable_id"], name: "index_votes_on_votable_type_and_votable_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "answers", "questions"
   add_foreign_key "awards", "users"
+  add_foreign_key "votes", "users"
 end
