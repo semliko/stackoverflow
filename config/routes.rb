@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   devise_for :users
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root 'questions#index'
+
+  mount ActionCable.server => '/cable'
   concern :votable do
     patch 'make_vote', action: 'make_vote', on: :member
   end

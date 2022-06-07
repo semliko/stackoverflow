@@ -18,3 +18,9 @@ require("@nathanvda/cocoon")
 //
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
+
+//window.Cable = require("@rails/actioncable")
+//window.App = {}
+//App.cable = Cable.createConsumer()
+
+
