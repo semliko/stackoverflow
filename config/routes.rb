@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   root 'questions#index'
 
   mount ActionCable.server => '/cable'
+
   concern :votable do
     patch 'make_vote', action: 'make_vote', on: :member
   end

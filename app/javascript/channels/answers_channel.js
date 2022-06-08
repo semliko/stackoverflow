@@ -1,6 +1,6 @@
 import consumer from "./consumer"
 
-consumer.subscriptions.create("QuestionsChannel", {
+consumer.subscriptions.create("AnswersChannel", {
   connected() {
     // Called when the subscription is ready for use on the server
   },
@@ -10,7 +10,7 @@ consumer.subscriptions.create("QuestionsChannel", {
   },
 
   received(message) {
-    var questions = $('.questions')
+    var questions = $('.answers')
     questions.append(message)
     // Called when there's incoming data on the websocket for this channel
   }
