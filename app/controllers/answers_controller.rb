@@ -1,11 +1,11 @@
 class AnswersController < ApplicationController
   include UserVote
 
-  before_action :authenticate_user!, only: [:create, :update, :destroy, :delete_attached_file]
-  before_action :load_question, only: [:index, :new, :edit, :create]
-  before_action :load_answer, only: [:show, :update, :destroy, :edit, :delete_attached_file]
+  before_action :authenticate_user!, only: %i[create update destroy delete_attached_file]
+  before_action :load_question, only: %i[index new edit create]
+  before_action :load_answer, only: %i[show update destroy edit delete_attached_file]
 
-  after_action :publish_answer, only: [:create]
+  # after_action :publish_answer, only: [:create]
 
   def new
     @answer = @question.answers.build
@@ -33,7 +33,7 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:question_id, :body, files: [],
-                                   links_attributes: [:name, :url])
+                                                        links_attributes: %i[name url])
   end
 
   def load_question
@@ -41,10 +41,11 @@ class AnswersController < ApplicationController
   end
 
   def publish_answer
-    ActionCable.server.broadcast "answers_channel",
-      render_to_string(
-        partial: 'answers/answer',
-        locals: { answer: @answer })
+    ActionCable.server.broadcast 'answers_channel',
+                                 render_to_string(
+                                   partial: 'answers/answer',
+                                   locals: { answer: @answer }
+                                 )
   end
 
   def load_answer
