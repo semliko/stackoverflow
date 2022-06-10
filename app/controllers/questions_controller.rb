@@ -1,9 +1,11 @@
 class QuestionsController < ApplicationController
   include UserVote
+  include UserComment
+
   before_action :authenticate_user!, except: %i[index show delete_attached_file]
   before_action :load_question, only: %i[show edit update destroy mark_best_answer delete_attached_file]
 
-  # after_action :publish_question, only: [:create]
+  after_action :publish_question, only: [:create]
 
   def index
     @questions = Question.all
@@ -15,6 +17,7 @@ class QuestionsController < ApplicationController
     @best_answer = @question.best_answer
     @other_answers = @question.answers.where.not(id: @question.best_answer_id)
     @answer.links.new
+    @comments = @answer.comments
   end
 
   def new

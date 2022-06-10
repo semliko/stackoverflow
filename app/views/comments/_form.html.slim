@@ -1,0 +1,5 @@
+.comment-form
+  = form_with(model: resource.comments.new, url: polymorphic_path([:make_comment, resource]), local: false) do |f|
+    = f.label :body, 'Your Comment'
+    = f.text_area :body
+    = f.submit 'Save'

@@ -1,11 +1,12 @@
 class AnswersController < ApplicationController
   include UserVote
+  include UserComment
 
   before_action :authenticate_user!, only: %i[create update destroy delete_attached_file]
   before_action :load_question, only: %i[index new edit create]
   before_action :load_answer, only: %i[show update destroy edit delete_attached_file]
 
-  # after_action :publish_answer, only: [:create]
+  after_action :publish_answer, only: [:create]
 
   def new
     @answer = @question.answers.build

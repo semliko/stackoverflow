@@ -7,6 +7,7 @@ module UserComment
   end
 
   def make_comment
+    binding.pry
     votable_obj = model_klass.find(params[:id])
     vote_type = params[:vote][:vote_type]
     votable_obj.comments.upsert(
@@ -31,7 +32,7 @@ module UserComment
   end
 
   def vote_params
-    params.require(:comment).permit(:id, :comment)
+    params.require(:comment).permit(:id, :body, :comment)
   end
 
   def model_klass

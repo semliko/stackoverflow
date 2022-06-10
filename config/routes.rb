@@ -10,13 +10,17 @@ Rails.application.routes.draw do
     patch 'make_vote', action: 'make_vote', on: :member
   end
 
+  concern :commentable do
+    post 'make_comment', action: 'make_comment', on: :member
+  end
+
   resources :attached_files, only: [:destroy]
   resources :links, only: [:destroy]
-  resources :questions, concerns: :votable do
+  resources :questions, concerns: %i[votable commentable] do
     resources :votes, defaults: { votable: 'questions' }
     patch 'mark_best_answer', to: 'questions#mark_best_answer', on: :member
 
-    resources :answers, shallow: true, concerns: :votable, only: %i[create update destroy] do
+    resources :answers, shallow: true, concerns: %i[votable commentable], only: %i[create update destroy] do
       resources :votes, defaults: { votable: 'answers' }
     end
   end
