@@ -1,9 +1,10 @@
 class Answer < ApplicationRecord
   include Votable
+  include Commentable
 
   belongs_to :question
   belongs_to :user
-  has_many :awards,  as: :awardable
+  has_many :awards, as: :awardable
 
   has_many :links, dependent: :destroy, as: :linkable
 

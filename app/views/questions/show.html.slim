@@ -14,6 +14,10 @@ h1= @question.body
     - @question.links.each do |link|
       li= render link
 
+.comments
+  p Add Comment
+  = render @comments
+  = render 'comments/form', resource: @question
 .answers
   = render @best_answer if @best_answer
   = render @other_answers
