@@ -7,7 +7,9 @@ class User < ApplicationRecord
     :registerable,
     :recoverable,
     :rememberable,
-    :validatable
+    :validatable,
+    :omniauthable,
+    omniauth_providers: [:github]
   )
   has_many :questions
   has_many :answers
@@ -16,5 +18,9 @@ class User < ApplicationRecord
 
   def author_of?(user_id)
     user_id == id
+  end
+
+  def self.find_for_oauth(auth)
+    auth
   end
 end
