@@ -15,12 +15,14 @@ class User < ApplicationRecord
   has_many :answers
   has_many :awards, dependent: :destroy
   has_many :votes, dependent: :destroy
+  has_many :authorizations
 
   def author_of?(user_id)
     user_id == id
   end
 
   def self.find_for_oauth(auth)
-    auth
+    authorisation = Authorization.where(provider: auth.provider, uid: auth.uid.to_s).first
+    authorisation.user if authorisation
   end
 end
