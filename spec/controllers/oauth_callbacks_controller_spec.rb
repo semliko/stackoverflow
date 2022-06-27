@@ -10,11 +10,33 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
       expect(User).to receive(:find_for_oauth)
       get :github
     end
-    it 'redirects to the toot path if user does not exist' do
-      expect(User).to receive(:find_for_oauth)
-      get :github
 
-      expect(response).to redirect_to root_path
+    context 'user exists' do
+      let!(:user) { create(:user) }
+
+      before do
+        allow(User).to receive(:find_for_oauth).and_return(user)
+        get :github
+      end
+
+      it 'login user' do
+        expect(subject.current_user).to eq user
+      end
+
+      it 'redirects to root path' do
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context 'user does not exist' do
+      before do
+        allow(User).to receive(:find_for_oauth)
+        get :github
+      end
+
+      it 'redirects to the toot path if user does not exist' do
+        expect(response).to redirect_to root_path
+      end
     end
   end
 end
