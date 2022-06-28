@@ -34,6 +34,7 @@ gem 'jquery-rails'
 gem 'omniauth'
 gem 'omniauth-github'
 gem 'omniauth-google'
+gem 'omniauth-google-oauth2'
 gem 'slim-rails'
 
 group :development, :test do

@@ -9,7 +9,7 @@ class User < ApplicationRecord
     :rememberable,
     :validatable,
     :omniauthable,
-    omniauth_providers: [:github]
+    omniauth_providers: %i[github google_oauth2]
   )
   has_many :questions
   has_many :answers
