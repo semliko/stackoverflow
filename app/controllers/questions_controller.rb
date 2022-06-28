@@ -7,11 +7,15 @@ class QuestionsController < ApplicationController
 
   after_action :publish_question, only: [:create]
 
+  authorize_resource
+
   def index
+    authorize! :read, Question
     @questions = Question.all
   end
 
   def show
+    authorize! :read, @question
     @answer = Answer.new
     @awards = @question.awards
     @best_answer = @question.best_answer
@@ -21,6 +25,7 @@ class QuestionsController < ApplicationController
   end
 
   def new
+    authorize! :create, Question
     @question = Question.new
     @question.links.new
     @question.awards.new
@@ -52,6 +57,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
+    authorize! :read, @question
     @question.destroy
     redirect_to questions_path
   end
