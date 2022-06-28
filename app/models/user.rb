@@ -7,14 +7,25 @@ class User < ApplicationRecord
     :registerable,
     :recoverable,
     :rememberable,
-    :validatable
+    :validatable,
+    :omniauthable,
+    omniauth_providers: %i[github google_oauth2]
   )
   has_many :questions
   has_many :answers
   has_many :awards, dependent: :destroy
   has_many :votes, dependent: :destroy
+  has_many :authorizations, dependent: :destroy
 
   def author_of?(user_id)
     user_id == id
+  end
+
+  def self.find_for_oauth(auth)
+    AuthServices::FindForOauth.new(auth).call
+  end
+
+  def create_authorization(auth)
+    authorizations.create(provider: auth.provider, uid: auth.uid)
   end
 end
