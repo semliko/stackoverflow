@@ -31,6 +31,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'cancancan'
 gem 'cocoon'
 gem 'devise'
+gem 'doorkeeper'
 gem 'jquery-rails'
 gem 'omniauth'
 gem 'omniauth-github'
