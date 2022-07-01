@@ -42,6 +42,14 @@ describe 'Profiles API', type: :request do
           %w[id title body user_id created_at updated_at].each do |attr|
             expect(json.first[attr]).to eq questions.first.send(attr).as_json
           end
+
+          it 'returns user object' do
+            expect(question_response['user']['id']).to eq question.user.id
+          end
+
+          it 'contains short title' do
+            expect(question_response['short_title']).to eq question.title.truncate(7)
+          end
         end
 
         describe 'answers' do
