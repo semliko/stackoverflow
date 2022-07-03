@@ -5,12 +5,10 @@ In order to get answer from a community
 As an anauthenticated user
 I'd like to be able to ask the quetion
 ) do
-
   given(:user) { create(:user) }
   given(:badge_file) { "#{Rails.root}/spec/support/files/awards/star.png" }
 
   describe 'Authenticated user' do
-
     background do
       sign_in(user)
 
@@ -47,7 +45,7 @@ I'd like to be able to ask the quetion
       fill_in 'Title', with: 'Test question'
       fill_in 'Body', with: 'text text text'
 
-      #save_and_open_page
+      # save_and_open_page
       fill_in 'Award name', with: 'Test Award'
       attach_file 'Award badge', badge_file
       click_on 'Ask'
@@ -55,11 +53,9 @@ I'd like to be able to ask the quetion
     end
   end
 
-
   scenario 'Unauthenticated user asks a question with errors' do
     visit questions_path
-    click_on 'Ask question'
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).not_to have_content 'Ask question'
   end
 end

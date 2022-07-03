@@ -18,12 +18,9 @@ Rails.application.routes.draw do
   resources :attached_files, only: [:destroy]
   resources :links, only: [:destroy]
   resources :questions, concerns: %i[votable commentable] do
-    resources :votes, defaults: { votable: 'questions' }
     patch 'mark_best_answer', to: 'questions#mark_best_answer', on: :member
 
-    resources :answers, shallow: true, concerns: %i[votable commentable], only: %i[create update destroy] do
-      resources :votes, defaults: { votable: 'answers' }
-    end
+    resources :answers, shallow: true, concerns: %i[votable commentable], only: %i[create update destroy]
   end
   resources :users, only: [:show]
 
@@ -33,7 +30,8 @@ Rails.application.routes.draw do
         get :me, on: :collection
       end
 
-      resources :questions, only: [:index]
+      resources :questions, only: %i[index update] do
+      end
     end
   end
 end

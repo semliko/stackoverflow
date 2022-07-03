@@ -1,15 +1,13 @@
-
 require 'rails_helper'
 
-feature 'User can add links to answer', %q{
+feature 'User can add links to answer', "
 In order to provide additional info to my question
 As an questio's author
 I'd like to be able to add links
-} do
-
+" do
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
-  given(:gist_url) { 'https://gist.github.com/semliko/acb0417001b809849ae7807cd17fcb54'}
+  given(:gist_url) { 'https://gist.github.com/semliko/acb0417001b809849ae7807cd17fcb54' }
 
   scenario 'User adds link when provides answer', js: true do
     sign_in(user)
@@ -35,7 +33,11 @@ I'd like to be able to add links
     fill_in 'Url', with: gist_url
 
     click_on 'Add Answer'
-    click_on 'Delete link'
+    visit current_path
+
+    within '.links_display' do
+      click_on 'Delete link'
+    end
 
     within '.answers' do
       expect(page).to_not have_link 'My gist', href: gist_url

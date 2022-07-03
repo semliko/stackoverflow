@@ -7,7 +7,7 @@
   .total_votes_count
     p= "Toal votes #{resource.total_votes_count}"
 
-  - if current_user
+  - if current_user && resource.persisted?
       p= link_to 'Upvote', polymorphic_path([:make_vote, resource], vote: { vote_type: :upvote }), method: :patch, remote: true, class: 'votable'
       p= link_to 'Downvote', polymorphic_path([:make_vote, resource], vote: { vote_type: :downvote }), method: :patch, remote: true, class: 'votable'
 
