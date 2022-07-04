@@ -6,7 +6,7 @@ module UserAnswer
     before_action :load_answer, only: %i[show update destroy edit delete_attached_file]
 
     after_action :publish_answer, only: [:create]
-    #  authorize_resource
+    authorize_resource
   end
 
   def new
