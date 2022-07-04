@@ -30,10 +30,6 @@ Rails.application.routes.draw do
 
   resources :links, only: [:destroy]
 
-  # resources :questions, concerns: %i[questionable] do
-  #  resources :answers, shallow: true, concerns: %i[votable commentable], only: %i[create update destroy]
-  # end
-
   resources :questions, concerns: %i[questionable] do
     resources :answers, concerns: %i[answerable]
   end
