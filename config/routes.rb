@@ -20,12 +20,22 @@ Rails.application.routes.draw do
     patch 'mark_best_answer', to: 'questions#mark_best_answer', on: :member
   end
 
+  concern :answerable do
+    resources :answers, shallow: true, only: %i[create update destroy] do
+      concerns %i[votable commentable]
+    end
+  end
+
   resources :attached_files, only: [:destroy]
 
   resources :links, only: [:destroy]
 
+  # resources :questions, concerns: %i[questionable] do
+  #  resources :answers, shallow: true, concerns: %i[votable commentable], only: %i[create update destroy]
+  # end
+
   resources :questions, concerns: %i[questionable] do
-    resources :answers, shallow: true, concerns: %i[votable commentable], only: %i[create update destroy]
+    resources :answers, concerns: %i[answerable]
   end
 
   resources :users, only: [:show]
@@ -37,6 +47,7 @@ Rails.application.routes.draw do
       end
 
       resources :questions, concerns: %i[questionable] do
+        resources :answers, concerns: %i[answerable]
       end
     end
   end

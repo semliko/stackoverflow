@@ -3,119 +3,50 @@ require 'rails_helper'
 describe 'Answers API', type: :request do
   let(:headers) { { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' } }
 
-  describe 'GET /api/v1/answers' do
+  describe 'GET /api/v1/question:id/answers' do
     context 'unauthorized' do
+      let(:user) { create(:user) }
+      let(:access_token) { create(:access_token) }
+      let(:question) { create(:question, user: user) }
+      let!(:anwers) { create_list(:answer, 2, user: user, question: question) }
+
       it 'returns 401 status if there is no access_token' do
-        get '/api/v1/answers', headers: headers
+        get "/api/v1/questions/#{question.id}/answers", headers: headers
         expect(response.status).to eq 401
       end
 
       it 'returns 401 status if access_token is invalid' do
-        get '/api/v1/answers', params: { access_token: 123 }, headers: headers
+        get "/api/v1/questions/#{question.id}/answers", params: { access_token: 123 }, headers: headers
         expect(response.status).to eq 401
       end
     end
-
-    context 'authorised' do
-      let(:user) { create(:user) }
-      let(:access_token) { create(:access_token) }
-      let(:questions) { create_list(:question, 2, user: user) }
-      let(:question) { questions.first }
-      let(:question_response) { JSON.parse(response.body).first }
-      let!(:answers) { create_list(:answer, 3, question: question, user: user) }
-
-      before do
-        get '/api/v1/questions', params: { access_token: access_token.token }, headers: headers
-      end
-
-      it 'returns 200 status' do
-        json = JSON.parse(response.body)
-        expect(response).to be_successful
-      end
-
-      it 'returns list of questions' do
-        json = JSON.parse(response.body)
-        expect(json.size).to eq 2
-      end
-
-      it 'does not returns all public fields' do
-        json = JSON.parse(response.body)
-        %w[id title body user created_at updated_at].each do |attr|
-          expect(json.first[attr]).to eq questions.first.send(attr).as_json
-        end
-      end
-
-      it 'returns user object' do
-        expect(question_response['user']['id']).to eq question.user.id
-      end
-
-      it 'contains short title' do
-        expect(question_response['short_title']).to eq question.title.truncate(7)
-      end
-
-      describe 'answers' do
-        let(:answers_response) { JSON.parse(response.body).first['answers'] }
-
-        let(:answer) { answers.first }
-
-        it 'returns list of answers' do
-          expect(answers_response.size).to eq 3
-        end
-
-        it 'returns all public fields' do
-          %w[id body user_id created_at updated_at].each do |attr|
-            expect(answers_response.first[attr]).to eq answer.send(attr).as_json
-          end
-        end
-      end
-    end
   end
 
-  describe 'PATCH /api/v1/questions' do
+  describe 'PATCH /api/v1/anwers' do
     let(:user) { create(:user) }
     let(:access_token) { create(:access_token) }
-    let(:questions) { create_list(:question, 2, user: user) }
-    let(:question) { questions.first }
+    let(:question) { create(:question, user: user) }
+    let(:anwers) { create_list(:answer, 2, user: user, question: question) }
+    let(:answer) { anwers.first }
     let(:questions_response) { JSON.parse(response.body) }
 
     before do
-      questions.each(&:save!)
       access_token.update(resource_owner_id: user.id)
     end
 
-    context 'authorized autor of the question' do
-      it 'can update his question' do
-        patch "/api/v1/questions/#{question.id}",
-              params: { id: question, access_token: access_token.token,
-                        question: { title: 'new title', body: 'new body' } }
-        question.reload
+    context 'authorized autor of the answer' do
+      it 'can update his answer' do
+        patch "/api/v1/answers/#{answer.id}",
+              params: { id: answer, access_token: access_token.token,
+                        answer: { body: 'new body' } }
+        answer.reload
 
-        expect(question.title).to eq 'new title'
-        expect(question.body).to eq 'new body'
+        expect(answer.body).to eq 'new body'
       end
     end
   end
 
-  describe 'POST /api/v1/questions' do
-    let(:user) { create(:user) }
-    let(:access_token) { create(:access_token) }
-
-    before do
-      access_token.update(resource_owner_id: user.id)
-    end
-
-    context 'authorized user' do
-      it 'can create a new question' do
-        expect do
-          post '/api/v1/questions',
-               params: { access_token: access_token.token, user_id: user.id,
-                         question: { title: 'new title', body: 'new body' } }
-        end.to change(Question, :count).by(1)
-      end
-    end
-  end
-
-  describe 'DELETE /api/v1/questions' do
+  describe 'POST /api/v1/questions/:id/answers' do
     let(:user) { create(:user) }
     let(:access_token) { create(:access_token) }
     let(:question) { create(:question, user: user) }
@@ -126,9 +57,30 @@ describe 'Answers API', type: :request do
 
     context 'authorized user' do
       it 'can create a new question' do
-        delete "/api/v1/questions/#{question.id}",
-               params: { access_token: access_token.token, user_id: user.id, id: question.id }
-        expect(Question.count).to eq 0
+        expect do
+          post "/api/v1/questions/#{question.id}/answers",
+               params: { access_token: access_token.token, user_id: user.id, qeustion_id: question.id,
+                         answer: { body: 'new body' } }
+        end.to change(Answer, :count).by(1)
+      end
+    end
+  end
+
+  describe 'DELETE /api/v1/answers' do
+    let(:user) { create(:user) }
+    let(:access_token) { create(:access_token) }
+    let(:question) { create(:question, user: user) }
+    let(:answer) { create(:answer, user: user, question: question) }
+
+    before do
+      access_token.update(resource_owner_id: user.id)
+    end
+
+    context 'authorized user' do
+      it 'can delete a  answer' do
+        delete "/api/v1/answers/#{answer.id}",
+               params: { access_token: access_token.token, user_id: user.id, id: answer.id, qeustion_id: question.id }
+        expect(Answer.count).to eq 0
       end
     end
   end
