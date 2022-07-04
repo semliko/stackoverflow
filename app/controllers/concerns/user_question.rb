@@ -2,21 +2,18 @@ module UserQuestion
   extend ActiveSupport::Concern
 
   included do
-    # before_action :authenticate_user!, except: %i[index show delete_attached_file]
     before_action :load_question, only: %i[show edit update destroy mark_best_answer delete_attached_file]
 
     after_action :publish_question, only: [:create]
     helper_method :question
-    # authorize_resource
+    authorize_resource
   end
 
   def index
-    authorize! :read, Question
     @questions = Question.all
   end
 
   def show
-    authorize! :read, @question
     @answer = Answer.new
     @awards = @question.awards
     @best_answer = @question.best_answer
@@ -26,7 +23,6 @@ module UserQuestion
   end
 
   def new
-    authorize! :create, Question
     @question = Question.new
     @question.links.new
     @question.awards.new
@@ -52,13 +48,14 @@ module UserQuestion
     if current_user.author_of?(@question.user.id) &&
        @question.update(question_params)
       redirect_to @question
+    elsif api_request?
+      render json: { error: 'fail to upate' }
     else
       render :edit
     end
   end
 
   def destroy
-    # authorize! :read, @question
     @question.destroy
     redirect_to questions_path
   end
@@ -75,6 +72,10 @@ module UserQuestion
   end
 
   private
+
+  def api_request?
+    request.path.include?('/api/')
+  end
 
   def load_question
     @question = Question.with_attached_files.find(params[:id])

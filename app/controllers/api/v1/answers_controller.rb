@@ -1,5 +1,5 @@
-class Api::V1::QuestionsController < Api::V1::BaseController
-  include UserQuestion
+class Api::V1::AnswersController < Api::V1::BaseController
+  include UserAnswer
 
   def index
     render json: super

@@ -1,17 +1,17 @@
 require 'rails_helper'
 
-describe 'Question API', type: :request do
+describe 'Answers API', type: :request do
   let(:headers) { { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' } }
 
-  describe 'GET /api/v1/questions' do
+  describe 'GET /api/v1/answers' do
     context 'unauthorized' do
       it 'returns 401 status if there is no access_token' do
-        get '/api/v1/questions', headers: headers
+        get '/api/v1/answers', headers: headers
         expect(response.status).to eq 401
       end
 
       it 'returns 401 status if access_token is invalid' do
-        get '/api/v1/questions', params: { access_token: 123 }, headers: headers
+        get '/api/v1/answers', params: { access_token: 123 }, headers: headers
         expect(response.status).to eq 401
       end
     end

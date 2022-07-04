@@ -15,13 +15,19 @@ Rails.application.routes.draw do
     post 'make_comment', action: 'make_comment', on: :member
   end
 
-  resources :attached_files, only: [:destroy]
-  resources :links, only: [:destroy]
-  resources :questions, concerns: %i[votable commentable] do
+  concern :questionable do
+    concerns %i[votable commentable]
     patch 'mark_best_answer', to: 'questions#mark_best_answer', on: :member
+  end
 
+  resources :attached_files, only: [:destroy]
+
+  resources :links, only: [:destroy]
+
+  resources :questions, concerns: %i[questionable] do
     resources :answers, shallow: true, concerns: %i[votable commentable], only: %i[create update destroy]
   end
+
   resources :users, only: [:show]
 
   namespace :api do
@@ -30,7 +36,7 @@ Rails.application.routes.draw do
         get :me, on: :collection
       end
 
-      resources :questions, only: %i[index update] do
+      resources :questions, concerns: %i[questionable] do
       end
     end
   end
