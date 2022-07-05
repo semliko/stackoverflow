@@ -15,6 +15,8 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true
 
+  after_create :calculate_reputation
+
   def update_best_answer(answer_id)
     update_attribute(:best_answer_id, answer_id)
   end
@@ -27,5 +29,11 @@ class Question < ApplicationRecord
   def award_user(user_id)
     answered_user = User.find(user_id)
     awards.each { |a| answered_user.awards << a }
+  end
+
+  private
+
+  def calculate_reputation
+    ReputationJob.perform_later(self)
   end
 end

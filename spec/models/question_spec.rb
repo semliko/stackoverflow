@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Question, type: :model do
-
   describe 'associations' do
     it { should have_many :answers }
     it { should belong_to(:user).class_name('User') }
@@ -21,4 +20,13 @@ RSpec.describe Question, type: :model do
     end
   end
 
+  describe 'reputation' do
+    let(:user) { create(:user) }
+    let(:question) { build(:question, user: user) }
+
+    it 'calls Services::Reputation#calculate' do
+      expect(ReputationJob).to receive(:perform_later).with(question)
+      question.save!
+    end
+  end
 end
