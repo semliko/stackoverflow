@@ -210,7 +210,7 @@ RSpec.describe QuestionsController, type: :controller do
     context 'unsubscribe user' do
       it 'destroys users subscribtion' do
         expect do
-          post :unsubscribe, params: { user_id: user_1.id, id: question.id }
+          delete :unsubscribe, params: { user_id: user_1.id, id: question.id }
         end.to change(user_1.subscriptions, :count).by(-1)
       end
     end

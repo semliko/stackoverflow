@@ -76,8 +76,8 @@ module UserQuestion
   end
 
   def unsubscribe
-    subscription = Subscription.find(user_id: current_user.id, subscriwable_type: 'Question',
-                                     subscriwable_id: @question.id)
+    subscription = Subscription.where(user_id: current_user.id, subscriwable_type: 'Question',
+                                      subscriwable_id: @question.id).first
     subscription&.destroy
   end
 
