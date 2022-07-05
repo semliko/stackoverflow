@@ -2,7 +2,7 @@ module UserQuestion
   extend ActiveSupport::Concern
 
   included do
-    before_action :load_question, only: %i[show edit update destroy mark_best_answer delete_attached_file]
+    before_action :load_question, only: %i[show edit update destroy mark_best_answer delete_attached_file subscribe]
 
     after_action :publish_question, only: [:create]
     helper_method :question
@@ -69,6 +69,16 @@ module UserQuestion
       @question.award_user(user_id)
     end
     redirect_to @question
+  end
+
+  def subscribe
+    current_user.subscriptions.create(user: current_user, subscriwable_type: @question)
+  end
+
+  def unsubscribe
+    subscription = Subscription.find(user_id: current_user.id, subscriwable_type: 'Question',
+                                     subscriwable_id: @question.id)
+    subscription&.destroy
   end
 
   private

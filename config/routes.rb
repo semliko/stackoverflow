@@ -13,6 +13,11 @@ Rails.application.routes.draw do
 
   mount ActionCable.server => '/cable'
 
+  concern :subscriwable do
+    patch 'subscribe', action: 'subscribe', on: :collection
+    delete 'unsubscribe', action: 'unsubscribe', on: :collection
+  end
+
   concern :votable do
     patch 'make_vote', action: 'make_vote', on: :member
   end
@@ -36,7 +41,7 @@ Rails.application.routes.draw do
 
   resources :links, only: [:destroy]
 
-  resources :questions, concerns: %i[questionable] do
+  resources :questions, concerns: %i[questionable subscriwable] do
     resources :answers, concerns: %i[answerable]
   end
 
