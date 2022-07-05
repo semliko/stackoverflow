@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   #  get 'users/show'
   devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
@@ -14,15 +15,36 @@ Rails.application.routes.draw do
     post 'make_comment', action: 'make_comment', on: :member
   end
 
-  resources :attached_files, only: [:destroy]
-  resources :links, only: [:destroy]
-  resources :questions, concerns: %i[votable commentable] do
-    resources :votes, defaults: { votable: 'questions' }
+  concern :questionable do
+    concerns %i[votable commentable]
     patch 'mark_best_answer', to: 'questions#mark_best_answer', on: :member
+  end
 
-    resources :answers, shallow: true, concerns: %i[votable commentable], only: %i[create update destroy] do
-      resources :votes, defaults: { votable: 'answers' }
+  concern :answerable do
+    resources :answers, shallow: true, only: %i[create update destroy] do
+      concerns %i[votable commentable]
     end
   end
+
+  resources :attached_files, only: [:destroy]
+
+  resources :links, only: [:destroy]
+
+  resources :questions, concerns: %i[questionable] do
+    resources :answers, concerns: %i[answerable]
+  end
+
   resources :users, only: [:show]
+
+  namespace :api do
+    namespace :v1 do
+      resources :profiles, only: [:index] do
+        get :me, on: :collection
+      end
+
+      resources :questions, concerns: %i[questionable] do
+        resources :answers, concerns: %i[answerable]
+      end
+    end
+  end
 end

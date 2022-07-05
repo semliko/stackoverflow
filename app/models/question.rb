@@ -26,8 +26,6 @@ class Question < ApplicationRecord
 
   def award_user(user_id)
     answered_user = User.find(user_id)
-    awards.each{|a| answered_user.awards << a}
+    awards.each { |a| answered_user.awards << a }
   end
-
-
 end

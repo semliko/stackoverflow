@@ -1,5 +1,3 @@
-
-
 require 'rails_helper'
 
 feature 'User can delete his answer', %(
@@ -7,13 +5,11 @@ In order to remove an answer created earlier
 As an anauthenticated user
 Other users cannot delete my answers
 ) do
-
   given(:user_1) { create(:user) }
   given(:user_2) { create(:user) }
   given(:question) { create(:question, user: user_1) }
 
   describe 'Authenticated user_1' do
-
     background do
       sign_in(user_1)
       answer(question)
@@ -40,7 +36,7 @@ Other users cannot delete my answers
 
     scenario 'cannot delete user_1 answers', js: true do
       visit question_path(question)
-      #save_and_open_page
+      # save_and_open_page
 
       expect(page).to_not have_content 'Destroy'
     end

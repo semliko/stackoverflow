@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-
   let(:user_1) { create(:user) }
   let(:user_2) { create(:user) }
   let(:user_3) { create(:user) }
@@ -11,23 +10,30 @@ RSpec.describe AnswersController, type: :controller do
   let(:answer_3) { create(:answer, question: question, user: user_3) }
 
   describe 'POST #create' do
-
     context 'with valid attributes' do
       before { login(user_1) }
       it 'saves a new answer in the database' do
-        expect { post :create, params: { question_id: question, user_id: user_1, answer: attributes_for(:answer) }, format: :js }.to change(question.answers, :count).by(1)
-        expect { post :create, params: { question_id: question, user_id: user_1, answer: attributes_for(:answer) }, format: :js }.to change(user_1.answers, :count).by(1)
+        expect do
+          post :create, params: { question_id: question, user_id: user_1, answer: attributes_for(:answer) },
+                        format: :js
+        end.to change(question.answers, :count).by(1)
+        expect do
+          post :create, params: { question_id: question, user_id: user_1, answer: attributes_for(:answer) },
+                        format: :js
+        end.to change(user_1.answers, :count).by(1)
       end
     end
 
     context 'with invalid attributes' do
       before { login(user_1) }
       it 'does not save the answer' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }, format: :js }.to_not change(question.answers, :count)
+        expect do
+          post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) },
+                        format: :js
+        end.to_not change(question.answers, :count)
       end
     end
   end
-
 
   describe 'POST #upvote' do
     before { login(user_1) }
@@ -70,8 +76,10 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       context 'with invalid attributes' do
-
-        before { patch :update, params: { question_id: question, id: answer, answer: attributes_for(:answer, :invalid) }, format: :js }
+        before do
+          patch :update, params: { question_id: question, id: answer, answer: attributes_for(:answer, :invalid) },
+                         format: :js
+        end
         it 'does not change answer' do
           answer.reload
 
@@ -98,7 +106,9 @@ RSpec.describe AnswersController, type: :controller do
 
       let!(:answer) { create(:answer, question: question, user: user_1) }
       it 'deletes the answer' do
-        expect { delete :destroy, params: { question_id: question, id: answer } }.to change(question.answers, :count).by(-1)
+        expect do
+          delete :destroy, params: { question_id: question, id: answer }
+        end.to change(question.answers, :count).by(-1)
       end
 
       it 'redirects to index' do
@@ -113,12 +123,14 @@ RSpec.describe AnswersController, type: :controller do
 
       let!(:answer) { create(:answer, question: question, user: user_1) }
       it 'cannot delete the answer' do
-        expect { delete :destroy, params: { question_id: question, id: answer } }.to change(question.answers, :count).by(0)
+        expect do
+          delete :destroy, params: { question_id: question, id: answer }
+        end.to change(question.answers, :count).by(0)
       end
 
       it 'redirects to index' do
         delete :destroy, params: { question_id: question, id: answer }
-        expect(response).to redirect_to question_path(question)
+        expect(response).to redirect_to root_path
       end
     end
   end
