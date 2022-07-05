@@ -30,4 +30,14 @@ RSpec.describe Question, type: :model do
       question.save!
     end
   end
+
+  describe 'subscribe user to new answers notifications' do
+    let(:user) { create(:user) }
+    let(:question) { build(:question, user: user) }
+
+    it 'creates users subscribtion' do
+      expect { question.save }.to change(user.subscriptions, :count).by(1)
+      expect(user.subscriptions.count).to be 1
+    end
+  end
 end

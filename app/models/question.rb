@@ -16,7 +16,7 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true
 
-  after_create :calculate_reputation
+  after_create :calculate_reputation, :subscribe_author
 
   def update_best_answer(answer_id)
     update_attribute(:best_answer_id, answer_id)
@@ -36,5 +36,9 @@ class Question < ApplicationRecord
 
   def calculate_reputation
     ReputationJob.perform_later(self)
+  end
+
+  def subscribe_author
+    user.subscriptions.create(user: user, subscriwable: self)
   end
 end
