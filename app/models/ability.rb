@@ -29,8 +29,8 @@ class Ability
     can :update, [Question, Answer], user_id: user.id
     can :destroy, [Question, Answer, Subscription], user_id: user.id
     can :mark_best_answer, [Question], user_id: user.id
-    can :subscribe, [Question], user_id: user.id
-    can :unsubscribe, [Question], user_id: user.id
+    can :subscribe, [Question]
+    can :unsubscribe, [Question]
     can :make_vote, [Question, Answer]
   end
 end

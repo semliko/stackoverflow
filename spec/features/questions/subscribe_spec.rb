@@ -7,16 +7,11 @@ I'd like to be able to subscribe for the question notifications
 ) do
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
+  given(:user_2) { create(:user) }
 
   describe 'Authenticated user' do
     background do
-      sign_in(user)
-
-      visit questions_path
-      click_on 'Ask question'
-      fill_in 'Title', with: 'Test question'
-      fill_in 'Body', with: 'text text text'
-      click_on 'Ask'
+      sign_in(user_2)
     end
 
     scenario 'subscribtion link' do
@@ -25,14 +20,20 @@ I'd like to be able to subscribe for the question notifications
     end
 
     scenario 'subscribe for notifications' do
+      visit question_path(question)
       click_on 'Subscribe'
-      #  save_and_open_page
+      # save_and_open_page
+      visit question_path(question)
       expect(page).to have_content 'Unsubscribe'
     end
 
     scenario 'unsubscribe from notifications' do
+      visit question_path(question)
       click_on 'Subscribe'
-      #  save_and_open_page
+      visit question_path(question)
+      # save_and_open_page
+      click_on 'Unsubscribe'
+      visit question_path(question)
       expect(page).to have_content 'Subscribe'
     end
   end

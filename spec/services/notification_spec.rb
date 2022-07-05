@@ -19,7 +19,7 @@ RSpec.describe Notification do
   it 'notifies all users subscribed to this question about a new answer' do
     subscribed_users.each do |user|
       expect(NotificationMailer).to receive(:new_answer_notification).with(user, answer).and_call_original
+      subject.new_answer(user, answer)
     end
-    subject.new_answer(user, answer)
   end
 end

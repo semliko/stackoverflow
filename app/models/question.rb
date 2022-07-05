@@ -22,6 +22,10 @@ class Question < ApplicationRecord
     update_attribute(:best_answer_id, answer_id)
   end
 
+  def subscription_exist?(current_user_id)
+    subscriptions.exists?(user_id: current_user_id)
+  end
+
   def assign_awards
     best_answer.awards = awards
     best_answer.save

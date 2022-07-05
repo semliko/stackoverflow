@@ -72,7 +72,7 @@ module UserQuestion
   end
 
   def subscribe
-    current_user.subscriptions.create(user: current_user, subscriwable_type: @question)
+    current_user.subscriptions.create(subscriwable: @question)
   end
 
   def unsubscribe
