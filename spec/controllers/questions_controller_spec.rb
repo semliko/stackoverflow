@@ -189,4 +189,30 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'POST #subscribe' do
+    before { login(user_2) }
+    context 'subscribe user' do
+      it 'creates users subscribtion' do
+        expect do
+          post :subscribe, params: { id: question.id }
+        end.to change(user_2.subscriptions, :count).by(1)
+      end
+    end
+  end
+
+  describe 'DELETE #unsubscribe' do
+    before do
+      login(user_2)
+      post :subscribe, params: { id: question.id }
+    end
+
+    context 'unsubscribe user' do
+      it 'destroys users subscribtion' do
+        expect do
+          delete :unsubscribe, params: { id: question.id }
+        end.to change(user_2.subscriptions, :count).by(-1)
+      end
+    end
+  end
 end

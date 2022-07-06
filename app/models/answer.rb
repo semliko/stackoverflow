@@ -15,11 +15,17 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true, allow_blank: false
 
+  after_create :notify_author
+
   def best_answer?
     id == question.best_answer&.id
   end
 
   def title
     question.title
+  end
+
+  def notify_author
+    Notification.new.new_answer(question.user, question)
   end
 end

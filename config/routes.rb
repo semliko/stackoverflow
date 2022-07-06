@@ -1,4 +1,10 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
+  authenticate :user, ->(u) { u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
   use_doorkeeper
   #  get 'users/show'
   devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
@@ -6,6 +12,11 @@ Rails.application.routes.draw do
   root 'questions#index'
 
   mount ActionCable.server => '/cable'
+
+  concern :subscriwable do
+    patch 'subscribe', action: 'subscribe', on: :collection
+    delete 'unsubscribe', action: 'unsubscribe', on: :collection
+  end
 
   concern :votable do
     patch 'make_vote', action: 'make_vote', on: :member
@@ -30,7 +41,7 @@ Rails.application.routes.draw do
 
   resources :links, only: [:destroy]
 
-  resources :questions, concerns: %i[questionable] do
+  resources :questions, concerns: %i[questionable subscriwable] do
     resources :answers, concerns: %i[answerable]
   end
 
