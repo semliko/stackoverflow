@@ -34,14 +34,17 @@ gem 'cocoon'
 gem 'devise'
 gem 'doorkeeper'
 gem 'jquery-rails'
+gem 'mysql2'
 gem 'oj'
 gem 'omniauth'
 gem 'omniauth-github'
 gem 'omniauth-google'
 gem 'omniauth-google-oauth2'
+gem 'pg'
 gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim-rails'
+gem 'thinking-sphinx'
 gem 'whenever', require: false
 
 group :development, :test do
@@ -67,6 +70,7 @@ group :test do
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
+  gem 'database_cleaner'
   gem 'launchy'
   gem 'rails-controller-testing'
   gem 'shoulda-matchers', '~> 4.0'
