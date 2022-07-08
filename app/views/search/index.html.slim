@@ -1,0 +1,19 @@
+h2  Search Results
+table
+  thead
+  p
+    tr
+      th Type
+      th Name
+      th Link
+      th User email
+
+      tbody.search_reslults
+        - @results.each do |result|
+          tr
+            td = result&.title
+            td = result&.body  
+            td = result&.email if result.class.name == 'User' 
+            td = link_to 'Show', question_path(result) if result.class.name == 'Question'
+
+

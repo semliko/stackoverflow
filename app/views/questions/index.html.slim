@@ -1,6 +1,11 @@
 h2  Questions
 table
   thead
+= form_tag search_index_path, method: :get
+  p
+  =text_field_tag :search, params[:search], label: 'Seach box'
+  = submit_tag "Search", :name => nil 
+
     tr
       th Title
       th Body

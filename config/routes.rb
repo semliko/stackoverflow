@@ -37,6 +37,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :search, only: [:index]
+
   resources :attached_files, only: [:destroy]
 
   resources :links, only: [:destroy]
