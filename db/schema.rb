@@ -12,11 +12,14 @@
 
 ActiveRecord::Schema.define(version: 2022_07_05_131759) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
-    t.integer "record_id", null: false
-    t.integer "blob_id", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
@@ -35,7 +38,7 @@ ActiveRecord::Schema.define(version: 2022_07_05_131759) do
 
   create_table "answers", force: :cascade do |t|
     t.text "body"
-    t.integer "question_id", null: false
+    t.bigint "question_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id"
@@ -43,7 +46,7 @@ ActiveRecord::Schema.define(version: 2022_07_05_131759) do
   end
 
   create_table "authorizations", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.string "provider"
     t.string "uid"
     t.datetime "created_at", precision: 6, null: false
@@ -55,8 +58,8 @@ ActiveRecord::Schema.define(version: 2022_07_05_131759) do
   create_table "awards", force: :cascade do |t|
     t.string "name"
     t.string "awardable_type"
-    t.integer "awardable_id"
-    t.integer "user_id"
+    t.bigint "awardable_id"
+    t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["awardable_type", "awardable_id"], name: "index_awards_on_awardable_type_and_awardable_id"
@@ -66,8 +69,8 @@ ActiveRecord::Schema.define(version: 2022_07_05_131759) do
   create_table "comments", force: :cascade do |t|
     t.text "body"
     t.string "commentable_type", null: false
-    t.integer "commentable_id", null: false
-    t.integer "user_id", null: false
+    t.bigint "commentable_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
@@ -78,15 +81,15 @@ ActiveRecord::Schema.define(version: 2022_07_05_131759) do
     t.string "name"
     t.string "url"
     t.string "linkable_type"
-    t.integer "linkable_id"
+    t.bigint "linkable_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["linkable_type", "linkable_id"], name: "index_links_on_linkable_type_and_linkable_id"
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
-    t.integer "resource_owner_id", null: false
-    t.integer "application_id", null: false
+    t.bigint "resource_owner_id", null: false
+    t.bigint "application_id", null: false
     t.string "token", null: false
     t.integer "expires_in", null: false
     t.text "redirect_uri", null: false
@@ -99,8 +102,8 @@ ActiveRecord::Schema.define(version: 2022_07_05_131759) do
   end
 
   create_table "oauth_access_tokens", force: :cascade do |t|
-    t.integer "resource_owner_id"
-    t.integer "application_id", null: false
+    t.bigint "resource_owner_id"
+    t.bigint "application_id", null: false
     t.string "token", null: false
     t.string "refresh_token"
     t.integer "expires_in"
@@ -132,14 +135,14 @@ ActiveRecord::Schema.define(version: 2022_07_05_131759) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id"
-    t.integer "best_answer_id"
+    t.bigint "best_answer_id"
     t.index ["best_answer_id"], name: "index_questions_on_best_answer_id"
   end
 
   create_table "subscriptions", force: :cascade do |t|
     t.string "subscriwable_type", null: false
-    t.integer "subscriwable_id", null: false
-    t.integer "user_id", null: false
+    t.bigint "subscriwable_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["subscriwable_type", "subscriwable_id"], name: "index_subscriptions_on_subscriwable_type_and_subscriwable_id"
@@ -161,9 +164,9 @@ ActiveRecord::Schema.define(version: 2022_07_05_131759) do
 
   create_table "votes", force: :cascade do |t|
     t.integer "vote_type"
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.string "votable_type", null: false
-    t.integer "votable_id", null: false
+    t.bigint "votable_id", null: false
     t.index ["user_id"], name: "index_votes_on_user_id"
     t.index ["votable_id", "votable_type", "user_id"], name: "index_votes_on_votable_id_and_votable_type_and_user_id", unique: true
     t.index ["votable_type", "votable_id"], name: "index_votes_on_votable_type_and_votable_id"
