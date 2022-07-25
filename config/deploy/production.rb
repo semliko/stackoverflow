@@ -5,12 +5,6 @@
 
 server '195.201.31.141', user: 'deployer', roles: %w[app db web], primary: true
 set :rails_env, :production
-set :rvm_type, :user
-set :rvm_roles, %i[app web]
-set :use_sudo, true
-set :default_env, { rvm_bin_path: '~/.rvm/bin' }
-set :rvm_ruby_version, '2.7.1'
-set :rvm_ruby_version, 'default'
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
