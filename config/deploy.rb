@@ -21,7 +21,6 @@ set :rvm_ruby_version, '2.7.1'
 
 Rake::Task['deploy:assets:backup_manifest'].clear_actions
 set :passenger_restart_with_touch, true
-# set :passenger_restart_with_sudo, true
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
