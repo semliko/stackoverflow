@@ -12,16 +12,17 @@ set :branch, 'main'
 set :deploy_to, '/home/deployer/qna'
 set :deploy_user, 'deployer'
 
-# set :rvm_type, :user
+set :rvm_type, :system
 # set :rvm_roles, %i[app web]
 # set :use_sudo, true
 # set :default_env, { rvm_bin_path: '~/.rvm/bin' }
-# set :rvm_ruby_version, '2.7.1'
+set :rvm_ruby_version, '2.7.1'
 # set :rvm_ruby_version, 'default'
 
 Rake::Task['deploy:assets:backup_manifest'].clear_actions
 set :passenger_restart_with_touch, true
-set :passenger_restart_with_sudo, true
+# set :passenger_restart_with_sudo, true
+
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
 
