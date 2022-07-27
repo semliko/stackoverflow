@@ -13,7 +13,7 @@ set :deploy_to, '/home/deployer/qna'
 set :deploy_user, 'deployer'
 
 set :rvm_type, :system
-# set :rvm_roles, %i[app web]
+set :rvm_roles, %i[app web]
 # set :use_sudo, true
 # set :default_env, { rvm_bin_path: '~/.rvm/bin' }
 set :rvm_ruby_version, '2.7.1'
@@ -31,6 +31,7 @@ set :passenger_restart_with_touch, true
 
 # Default value for :pty is false
 # set :pty, true
+set :pty, false
 
 # Default value for :linked_files is []
 append :linked_files, 'config/database.yml', 'config/master.key'
