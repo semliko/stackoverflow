@@ -1,0 +1,47 @@
+### Unicorn ###
+check process unicorn
+  with pidfile "/home/deployer/qna/shared/tmp/pids/unicorn.pid"
+  start program = "/bin/su - deployer -c 'cd /home/deployer/qna/current && RAILS_ENV=production /home/deployer/.rvm/bin/rvm  default do bundle exec unicorn -c /home/deployer/QA-sample/current/config/unicorn/production.rb -E deployment -D'"
+  stop program = "/usr/bin/env kill -s QUIT `cat /home/deployer/qna/current/tmp/pids/unicorn.pid"
+  if memory usage > 90% for 3 cycles then restart
+  if cpu > 90% for 2 cycles then restart
+  if 5 restarts within 5 cycles then timeout
+
+### Sphinx ###
+check process sphinx
+  with pidfile "/home/deployer/qna/shared/log/production.sphinx.pid"
+  start program = "/bin/su - deployer -c 'cd /home/deployer/qna/current && /home/deployer/.rvm/bin/rvm default do bundle exec rake RAILS_ENV=production ts:start'"
+  stop program = "/bin/su - deployer -c 'cd /home/deployer/qna/current && /home/deployer/.rvm/bin/rvm default do bundle exec rake RAILS_ENV=production ts:stop'"
+  if cpu > 80% for 2 cycles then restart
+  if memory usage > 80% for 4 cycles then restart
+  if 3 restarts within 3 cycles then timeout
+
+### Nginx ###
+check process nginx with pidfile /run/nginx.pid
+  start program = "/usr/sbin/service nginx start"
+  stop program = "/usr/sbin/service nginx stop"
+  if cpu > 60% for 2 cycles then alert
+  if cpu > 80% for 5 cycles then restart
+  if memory usage > 80% for 5 cycles then restart
+  if failed host 188.166.44.84 port 80 protocol http
+    then restart
+  if 3 restarts within 5 cycles then timeout
+  
+### Postgresql ###
+check process postgresql
+  with pidfile /var/run/postgresql/14-main.pid
+  start program = "/usr/sbin/service postgresql start"
+  stop  program = "/usr/sbin/service postgresql stop"
+  if failed host localhost port 5432 protocol pgsql then restart
+  if cpu > 80% then restart
+  if memory usage > 80% for 2 cycles then restart
+  if 5 restarts within 5 cycles then timeout
+
+### Sidekiq ###
+check process sidekiq
+  with pidfile "/home/deployer/qna/shared/tmp/pids/sidekiq-0.pid"
+  start program = "/bin/su - deployer -c 'cd /home/deployer/qna/current && /home/deployer/.rvm/bin/rvm default do bundle exec sidekiq --index 0 --pidfile /home/deployer/qna/shared/tmp/pids/sidekiq-0.pid --environment production --logfile /home/deployer/qna/shared/log/sidekiq.log --daemon'"
+  stop program = "/bin/su - deployer -c 'cd /home/deployer/qna/current && /home/deployer/.rvm/bin/rvm default do bundle exec sidekiqctl stop /home/deployer/qna/shared/tmp/pids/sidekiq-0.pid 10'"
+  if cpu > 80% then restart
+  if memory usage > 80% for 2 cycles then restart
+  if 3 restarts within 3 cycles then timeout

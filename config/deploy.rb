@@ -20,7 +20,7 @@ set :rvm_ruby_version, '2.7.1'
 # set :rvm_ruby_version, 'default'
 
 Rake::Task['deploy:assets:backup_manifest'].clear_actions
-set :passenger_restart_with_touch, true
+# set :passenger_restart_with_touch, true
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
@@ -40,6 +40,13 @@ append :linked_files, 'config/database.yml', 'config/master.key'
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'tmp/webpacker', 'public/system', 'vendor/bundle',
        'storage'
 
+after 'deploy:publishing', 'deploy:restart'
+
+namespace :deploy do
+  task :restart do
+    invoke 'unicorn:restart'
+  end
+end
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
