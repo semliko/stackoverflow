@@ -1,32 +1,33 @@
-h1= @question.title
-h1= @question.body
+- cache resource do 
+  h1= @question.title
+  h1= @question.body
 
-- if @question.files.attached?
-  - @question.files.each do |file|
-    p= link_to file.filename.to_s, url_for(file)
-    p= link_to 'Delete File', attached_file_path(id: file.id), method: :delete
+  - if @question.files.attached?
+    - @question.files.each do |file|
+      p= link_to file.filename.to_s, url_for(file)
+      p= link_to 'Delete File', attached_file_path(id: file.id), method: :delete
 
-- if user_signed_in?
-    p= link_to 'Subscribe', url: subscribe_questions_path(params: {id: @question})  if !@question.subscription_exist?(current_user.id)
-    p= link_to('Unsubscribe', url: subscribe_questions_path(params: {id: @question}), method: :delete) if @question.subscription_exist?(current_user.id)
+  - if user_signed_in?
+      p= link_to 'Subscribe', url: subscribe_questions_path(params: {id: @question})  if !@question.subscription_exist?(current_user.id)
+      p= link_to('Unsubscribe', url: subscribe_questions_path(params: {id: @question}), method: :delete) if @question.subscription_exist?(current_user.id)
 
-=render 'votes/show', resource: @question
+  =render 'votes/show', resource: @question
 
-.links
-  p Links:
-  ul
-    - @question.links.each do |link|
-      li= render link
+  .links
+    p Links:
+    ul
+      - @question.links.each do |link|
+        li= render link
 
-.comments
-  p Add Comment
-  = render @comments
-  = render 'comments/form', resource: @question
-.answers
-  = render @best_answer if @best_answer
-  = render @other_answers
-.awards
-  = render @awards
-.answer-errors
-  = render 'shared/errors', resource: @answer
-=render 'answers/form', question: @question, answer: @answer
+  .comments
+    p Add Comment
+    = render @comments
+    = render 'comments/form', resource: @question
+  .answers
+    = render @best_answer if @best_answer
+    = render @other_answers
+  .awards
+    = render @awards
+  .answer-errors
+    = render 'shared/errors', resource: @answer
+  =render 'answers/form', question: @question, answer: @answer

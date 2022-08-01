@@ -12,8 +12,9 @@ table
       th Actions
 
       tbody.questions
-        - @questions.each do |question|
-          = render question
+        - cache collection_cache_key_for :questions do 
+          - @questions.each do |question|
+            = render question
 
 br
 - if can?(:create, Question)
