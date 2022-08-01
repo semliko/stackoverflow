@@ -41,6 +41,7 @@ gem 'omniauth-github'
 gem 'omniauth-google'
 gem 'omniauth-google-oauth2'
 gem 'pg'
+gem 'redis-rails'
 gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim-rails'

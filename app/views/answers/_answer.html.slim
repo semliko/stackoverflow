@@ -1,35 +1,36 @@
-p= answer.body
-- if answer.files.attached?
-  -  answer.files.each do |file|
-    p= link_to file.filename.to_s, url_for(file)
-    p= link_to 'Delete File', attached_file_path(id: file.id), method: :delete
+- cache answer do 
+  p= answer.body
+  - if answer.files.attached?
+    -  answer.files.each do |file|
+      p= link_to file.filename.to_s, url_for(file)
+      p= link_to 'Delete File', attached_file_path(id: file.id), method: :delete
 
-  p Links:
-.links_display
-  ul
-    - answer.links.each do |link|
-      li= render link
+    p Links:
+  .links_display
+    ul
+      - answer.links.each do |link|
+        li= render link
 
-- if answer.best_answer?
-  p= 'Best answer'
-  ul
-    - answer.awards.each do |award|
-      li = render award
+  - if answer.best_answer?
+    p= 'Best answer'
+    ul
+      - answer.awards.each do |award|
+        li = render award
 
-=render 'votes/show', resource: answer
+  =render 'votes/show', resource: answer
 
-- if user_signed_in?
-  - if current_user.author_of?(answer.user.id)
-    p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
-    p= link_to('Mark as the best answer', mark_best_answer_question_path(answer.question, answer_id: answer.id), method: :patch) if !answer.best_answer?
-    - if answer.persisted?
-      p= link_to 'Destroy', answer, method: :delete, data: { confirm: 'Are you sure?' } 
+  - if user_signed_in?
+    - if current_user.author_of?(answer.user.id)
+      p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+      p= link_to('Mark as the best answer', mark_best_answer_question_path(answer.question, answer_id: answer.id), method: :patch) if !answer.best_answer?
+      - if answer.persisted?
+        p= link_to 'Destroy', answer, method: :delete, data: { confirm: 'Are you sure?' } 
 
-.answer-form
- = form_with(model: [ answer ], url: answer.persisted? ? answer_path(answer) : question_answers_path(@question), class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false) do |f|
-   = f.label :body, 'Your answer'
-   = f.text_area :body
-     br
-   = f.label :files
-   = f.file_field :files, multiple: true, direct_upload: true
-   = f.submit 'Save'
+  .answer-form
+   = form_with(model: [ answer ], url: answer.persisted? ? answer_path(answer) : question_answers_path(@question), class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false) do |f|
+     = f.label :body, 'Your answer'
+     = f.text_area :body
+       br
+     = f.label :files
+     = f.file_field :files, multiple: true, direct_upload: true
+     = f.submit 'Save'
